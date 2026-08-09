@@ -1,168 +1,374 @@
 <!doctype html>
 <html lang="ps" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#071426">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="IshaqZada">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon.svg">
-  <title>IshaqZada Global</title>
-  <style>
-    :root{--navy:#071426;--navy2:#0b1f39;--gold:#d7a83f;--cream:#f6f3ec;--card:#fff;--muted:#6c7580;--danger:#c73e4d;--ok:#14966c}
-    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;background:var(--cream);color:#17202a}
-    button,input,select,textarea{font:inherit}.app{max-width:760px;margin:auto;min-height:100vh;background:var(--cream);padding-bottom:82px}
-    header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:18px 16px 22px;position:sticky;top:0;z-index:10;box-shadow:0 3px 18px #0003}
-    .brand{display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{display:flex;align-items:center;gap:10px}.mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,#f4d47f,var(--gold));color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:20px;box-shadow:inset 0 0 0 2px #ffffff55}.brand h1{font-size:19px;margin:0}.brand small{color:#d8e0ea}
-    .pill{border:1px solid #ffffff3b;background:#ffffff14;color:#fff;border-radius:999px;padding:8px 12px}
-    .search{display:flex;gap:8px;margin-top:16px}.search input{flex:1;border:0;border-radius:14px;padding:13px 14px;outline:none}.search button{border:0;background:var(--gold);color:var(--navy);font-weight:800;border-radius:14px;padding:0 16px}
-    main{padding:14px}.hero{background:linear-gradient(135deg,#0b1f39,#122f50);color:#fff;border-radius:22px;padding:22px;position:relative;overflow:hidden}.hero:after{content:"IZ";position:absolute;left:-5px;bottom:-28px;font-size:120px;font-weight:900;color:#ffffff0c}.hero h2{margin:0 0 8px;font-size:25px}.hero p{margin:0;color:#d9e3ee;line-height:1.8}.cta{display:flex;gap:8px;margin-top:16px}.btn{border:0;border-radius:13px;padding:12px 15px;font-weight:800;cursor:pointer}.gold{background:var(--gold);color:var(--navy)}.dark{background:var(--navy);color:#fff}.light{background:#fff;color:var(--navy);border:1px solid #dfe4e8}.danger{background:var(--danger);color:#fff}.ok{background:var(--ok);color:#fff}
-    .section-title{display:flex;justify-content:space-between;align-items:center;margin:22px 2px 11px}.section-title h3{margin:0;font-size:18px}.section-title span{font-size:13px;color:var(--muted)}
-    .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.cat{background:#fff;border-radius:16px;padding:13px 8px;text-align:center;box-shadow:0 4px 16px #0b1f3910}.cat b{display:block;font-size:22px;margin-bottom:6px}.cat span{font-size:12px}
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 18px #0b1f3910}.photo{height:135px;background:linear-gradient(135deg,#e7ebef,#fff);display:grid;place-items:center;font-size:52px}.card .p{padding:12px}.price{color:#9a6f10;font-weight:900;margin-top:6px}.meta{font-size:12px;color:var(--muted);margin-top:5px}.row{display:flex;gap:8px;align-items:center}.between{justify-content:space-between}
-    nav{position:fixed;bottom:0;right:0;left:0;max-width:760px;margin:auto;background:#fff;border-top:1px solid #e5e7eb;display:grid;grid-template-columns:repeat(5,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom)}nav button{border:0;background:none;padding:10px 4px;color:#66717e;font-size:11px}.navicon{display:block;font-size:20px;margin-bottom:2px}.active{color:#9a6f10!important;font-weight:800}
-    .view{display:none}.view.show{display:block}.panel{background:#fff;border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 4px 18px #0b1f3910}.field{margin:10px 0}.field label{display:block;font-size:13px;margin-bottom:6px;color:#4c5661}.field input,.field select,.field textarea{width:100%;border:1px solid #d8dde3;background:#fff;border-radius:12px;padding:12px;outline:none}.note{font-size:12px;color:var(--muted);line-height:1.7}.badge{font-size:11px;border-radius:999px;padding:5px 9px;background:#edf1f4}.verified{background:#e6f7f0;color:#0f7b59}.pending{background:#fff4d8;color:#8a640c}.suspended{background:#fde7ea;color:#a62f3f}
-    .shop{display:flex;gap:12px;align-items:center}.avatar{width:54px;height:54px;border-radius:16px;background:#0b1f39;color:#fff;display:grid;place-items:center;font-size:24px;font-weight:900}.empty{text-align:center;color:var(--muted);padding:24px 8px}.hide{display:none!important}
-    .toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%);background:#17202a;color:#fff;padding:10px 15px;border-radius:999px;z-index:99;opacity:0;pointer-events:none;transition:.25s}.toast.on{opacity:1}
-    @media(min-width:620px){.cats{grid-template-columns:repeat(6,1fr)}.grid{grid-template-columns:repeat(3,1fr)}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071426">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>IshaqZada Global</title>
+
+<style>
+:root{--navy:#071426;--navy2:#0b1f39;--gold:#d7a83f;--cream:#f6f3ec;--muted:#6c7580}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;background:var(--cream);color:#17202a}
+button,input,select,textarea{font:inherit}
+.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:85px}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:18px 16px 22px}
+.brand{display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;align-items:center;gap:10px}
+.mark{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#f4d47f,var(--gold));color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:20px}
+.brand h1{font-size:20px;margin:0}
+.brand small{color:#d8e0ea}
+.pill{border:1px solid #ffffff44;background:#ffffff12;color:white;border-radius:999px;padding:9px 13px}
+.search{display:flex;gap:8px;margin-top:16px}
+.search input{flex:1;border:0;border-radius:14px;padding:14px}
+.search button{border:0;background:var(--gold);font-weight:bold;border-radius:14px;padding:0 18px}
+.langs{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+main{padding:14px}
+.hero{background:linear-gradient(135deg,#0b1f39,#12365c);color:white;border-radius:22px;padding:23px;position:relative;overflow:hidden}
+.hero h2{font-size:25px;margin:0 0 10px}
+.hero p{color:#dce6ef;line-height:1.8}
+.cta{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.btn{border:0;border-radius:13px;padding:12px 15px;font-weight:800}
+.gold{background:var(--gold);color:var(--navy)}
+.light{background:white;color:var(--navy)}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:23px 3px 11px}
+.section-title h3{margin:0}
+.section-title span{color:var(--muted);font-size:13px}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.cat{background:white;border:0;border-radius:16px;padding:13px 5px;text-align:center;box-shadow:0 4px 16px #0000000c}
+.cat b{font-size:23px;display:block;margin-bottom:6px}
+.cat span{font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 18px #0000000c}
+.photo{height:135px;background:linear-gradient(135deg,#e8edf2,#fff);display:grid;place-items:center;font-size:52px}
+.p{padding:12px}
+.price{font-weight:900;color:#9a6f10;margin-top:6px}
+.meta{font-size:12px;color:var(--muted);margin-top:5px}
+.panel{background:white;border-radius:18px;padding:16px;margin-bottom:12px}
+.field{margin:10px 0}
+.field label{display:block;font-size:13px;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px}
+.view{display:none}.view.show{display:block}
+nav{position:fixed;bottom:0;left:0;right:0;max-width:760px;margin:auto;background:white;border-top:1px solid #ddd;display:grid;grid-template-columns:repeat(5,1fr)}
+nav button{border:0;background:white;padding:10px 3px;font-size:11px}
+.navicon{display:block;font-size:20px}
+.active{color:#9a6f10;font-weight:bold}
+.toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:#17202a;color:white;padding:10px 16px;border-radius:30px;opacity:0;transition:.2s}
+.toast.on{opacity:1}
+</style>
 </head>
+
 <body>
 <div class="app">
+
 <header>
-  <div class="brand">
-    <div class="logo"><div class="mark">IZ</div><div><h1>IshaqZada Global</h1><small>نړیوال آنلاین بازار</small></div></div>
-    <button class="pill" id="installBtn">⬇ نصب</button>
-  </div>
-  <div class="search"><input id="searchInput" placeholder="محصول، دوکان یا کټګوري ولټوئ"><button onclick="searchProducts()">لټون</button></div>
+<div class="brand">
+<div class="logo">
+<div class="mark">IZ</div>
+<div><h1>IshaqZada Global</h1><small>نړیوال آنلاین بازار</small></div>
+</div>
+<button class="pill" id="installBtn">⬇ نصب</button>
+</div>
+
+<div class="search">
+<input id="searchInput" placeholder="محصول، دوکان یا کټګوري ولټوئ">
+<button onclick="searchProducts()">لټون</button>
+</div>
+
+<div class="langs">
+<button class="pill" onclick="setLang('ps')">پښتو</button>
+<button class="pill" onclick="setLang('fa')">دری</button>
+<button class="pill" onclick="setLang('en')">English</button>
+<button class="pill" onclick="setLang('ar')">العربية</button>
+<button class="pill">AFN</button>
+</div>
 </header>
+
 <main>
+
 <section id="homeView" class="view show">
-  <div class="hero">
-    <h2>هرڅه په یو خوندي نړیوال بازار کې</h2>
-    <p>محصولات، دوکانونه، فرمایشونه او مستقیمه اړیکه — په موبایل کې ساده او چټک.</p>
-    <div class="cta"><button class="btn gold" onclick="go('shopsView')">دوکانونه</button><button class="btn light" onclick="go('sellerView')">خپل دوکان جوړ کړه</button></div>
-  </div>
-  <div class="section-title"><h3>کټګورۍ</h3><span>ټولې</span></div>
-  <div class="cats">
-    <div class="cat"><b>📱</b><span>موبایل</span></div><div class="cat"><b>👕</b><span>کالي</span></div>
-    <div class="cat"><b>💄</b><span>کاسمیټکس</span></div><div class="cat"><b>🏠</b><span>کور</span></div>
-    <div class="cat"><b>🚗</b><span>موټر</span></div><div class="cat"><b>🧰</b><span>خدمات</span></div>
-  </div>
-  <div class="section-title"><h3>مشهور محصولات</h3><span id="productCount"></span></div>
-  <div id="productsGrid" class="grid"></div>
+
+<div class="hero">
+<h2>هرڅه په یو خوندي نړیوال بازار کې</h2>
+<p>محصولات، دوکانونه، املاک، موټرونه، خدمات او نور — په یو عصري نړیوال بازار کې.</p>
+
+<div class="cta">
+<button class="btn gold" onclick="go('shopsView')">🏪 دوکانونه</button>
+<button class="btn light" onclick="go('sellerView')">➕ خپل دوکان جوړ کړه</button>
+<button class="btn light" onclick="toast('Filter فعال دی')">🔎 Filter</button>
+</div>
+</div>
+
+<div class="section-title"><h3>⚡ Flash Deals</h3><span>محدود تخفیفونه</span></div>
+
+<div class="section-title"><h3>کټګورۍ</h3><span>ټولې</span></div>
+
+<div class="cats">
+
+<button class="cat"><b>📱</b><span>موبایل</span></button>
+<button class="cat"><b>👕</b><span>کالي</span></button>
+<button class="cat"><b>💄</b><span>کاسمیټکس</span></button>
+<button class="cat"><b>🏠</b><span>کور په خرڅ</span></button>
+
+<button class="cat"><b>🔑</b><span>کور په کرایه</span></button>
+<button class="cat"><b>🏡</b><span>کور په ګروي</span></button>
+<button class="cat"><b>🚘</b><span>نوی موټر</span></button>
+<button class="cat"><b>🚗</b><span>زوړ موټر</span></button>
+
+<button class="cat"><b>💻</b><span>الکترونیک</span></button>
+<button class="cat"><b>🛒</b><span>خوراکي</span></button>
+<button class="cat"><b>🧰</b><span>خدمات</span></button>
+<button class="cat"><b>📦</b><span>نور اجناس</span></button>
+
+</div>
+
+<div class="section-title"><h3>مشهور محصولات</h3><span id="productCount"></span></div>
+<div id="productsGrid" class="grid"></div>
+
 </section>
 
 <section id="shopsView" class="view">
-  <div class="section-title"><h3>تایید شوي دوکانونه</h3><span>Verified Sellers</span></div>
-  <div id="shopsList"></div>
+<div class="section-title"><h3>🏪 دوکانونه</h3><span>Verified Sellers</span></div>
+<div class="panel">تایید شوي دوکانونه به دلته ښکاري.</div>
 </section>
 
 <section id="cartView" class="view">
-  <div class="section-title"><h3>ستاسو Cart</h3><span id="cartCount"></span></div>
-  <div id="cartList"></div>
-  <div id="checkoutBox" class="panel">
-    <h3>فرمایش بشپړول</h3>
-    <div class="field"><label>بشپړ نوم</label><input id="buyerName"></div>
-    <div class="field"><label>موبایل</label><input id="buyerPhone"></div>
-    <div class="field"><label>ولایت / پته</label><textarea id="buyerAddress"></textarea></div>
-    <div class="field"><label>د تادیې طریقه</label><select id="paymentMethod"><option>د رسولو پر وخت نغدې</option><option>بانکي/والټ تادیه (API ته اړتیا لري)</option></select></div>
-    <button class="btn gold" style="width:100%" onclick="placeOrder()">فرمایش ثبت کړه</button>
-    <p class="note">یادونه: حقیقي آنلاین پیسې یوازې د رسمي بانک یا والټ API له نښلولو وروسته انتقالېدای شي.</p>
-  </div>
+<div class="section-title"><h3>🛒 Cart</h3><span id="cartCount">0</span></div>
+<div id="cartList" class="panel">Cart تش دی.</div>
+
+<div class="panel">
+<h3>📦 فرمایش</h3>
+<div class="field"><label>بشپړ نوم</label><input id="buyerName"></div>
+<div class="field"><label>موبایل</label><input id="buyerPhone"></div>
+<div class="field"><label>ولایت / ولسوالۍ / پته</label><textarea id="buyerAddress"></textarea></div>
+
+<div class="field">
+<label>Payment</label>
+<select>
+<option>Cash on Delivery</option>
+<option>Online Payment</option>
+</select>
+</div>
+
+<button class="btn gold" style="width:100%" onclick="toast('فرمایش ثبت شو')">فرمایش ثبت کړه</button>
+</div>
 </section>
 
 <section id="sellerView" class="view">
-  <div class="panel">
-    <h3>Seller Verification</h3>
-    <p class="note">د دوکان د جوړولو لپاره اصلي تذکره یا پاسپورټ اړین دی. دا اسناد عامو خلکو ته نه ښودل کېږي.</p>
-    <div class="field"><label>بشپړ نوم</label><input id="sellerName"></div>
-    <div class="field"><label>موبایل</label><input id="sellerPhone"></div>
-    <div class="field"><label>هېواد / ولایت</label><input id="sellerLocation"></div>
-    <div class="field"><label>د سند ډول</label><select id="idType"><option>تذکره</option><option>پاسپورټ</option></select></div>
-    <div class="field"><label>د سند عکس</label><input id="idFile" type="file" accept="image/*,.pdf"></div>
-    <div class="field"><label>د دوکان نوم</label><input id="shopName"></div>
-    <button class="btn gold" style="width:100%" onclick="submitSeller()">د تایید لپاره واستوه</button>
-  </div>
-  <div class="panel">
-    <h3>زما دوکان</h3>
-    <div id="myShopStatus" class="note">تر اوسه دوکان نشته.</div>
-  </div>
+
+<div class="panel">
+<h3>🏪 خپل دوکان جوړ کړه</h3>
+
+<div class="field"><label>بشپړ نوم</label><input></div>
+<div class="field"><label>موبایل</label><input></div>
+<div class="field"><label>هېواد</label><input></div>
+<div class="field"><label>ولایت</label><input></div>
+<div class="field"><label>د دوکان نوم</label><input></div>
+
+<div class="field">
+<label>تذکره / پاسپورټ</label>
+<input type="file">
+</div>
+
+<button class="btn gold" style="width:100%" onclick="toast('ستاسو دوکان د Admin تایید ته واستول شو')">د تایید لپاره واستوه</button>
+</div>
+
+<div class="panel">
+<h3>📊 Seller Dashboard</h3>
+<p>خرڅلاو، فرمایشونه، عاید، محصولات او Statistics.</p>
+</div>
+
 </section>
 
 <section id="accountView" class="view">
-  <div class="panel">
-    <h3>حساب</h3>
-    <div class="field"><label>ایمیل</label><input id="loginEmail" type="email" placeholder="name@example.com"></div>
-    <div class="field"><label>پاسورډ</label><input id="loginPassword" type="password"></div>
-    <div class="row"><button class="btn dark" onclick="login()">ننوتل</button><button class="btn light" onclick="register()">نوی حساب</button></div>
-    <p class="note">Admin برخه یوازې د مالک په ځانګړي حساب کې ښکاري.</p>
-  </div>
-  <div id="accountState" class="panel hide"></div>
-  <div id="adminPanel" class="hide">
-    <div class="panel">
-      <div class="row between"><h3>👑 Admin Panel</h3><span class="badge verified">Owner only</span></div>
-      <div class="field"><label>د میاشتني کرایې سیستم</label><select id="feeEnabled" onchange="saveAdminSettings()"><option value="off">اوس وړیا</option><option value="on">میاشتنی فیس فعال</option></select></div>
-      <div class="field"><label>میاشتنی فیس (AFN)</label><input id="monthlyFee" type="number" value="300" onchange="saveAdminSettings()"></div>
-      <p class="note">که فیس فعال وي او دوکاندار د میاشتې پیسې ورنه کړي، دوکان Suspended کېږي. د تادیې له تایید وروسته بېرته Active کېږي.</p>
-    </div>
-    <div class="panel"><h3>د دوکاندارانو تایید</h3><div id="adminSellers"></div></div>
-    <div class="panel"><h3>فرمایشونه</h3><div id="adminOrders"></div></div>
-  </div>
+
+<div class="panel">
+<h3>👤 Login / Signup</h3>
+<div class="field"><label>Email</label><input type="email"></div>
+<div class="field"><label>Password</label><input type="password"></div>
+
+<button class="btn gold" onclick="toast('Login')">Login</button>
+<button class="btn light" onclick="toast('حساب جوړ شو')">Signup</button>
+
+<p><button class="btn light" onclick="toast('Password reset')">Password Reset</button></p>
+</div>
+
+<div class="panel">
+<h3>❤️ Wishlist</h3>
+<p>ستاسو خوښ شوي محصولات.</p>
+</div>
+
+<div class="panel">
+<h3>🔔 Notifications</h3>
+<p>فرمایشونه، دوکانونه او پیغامونه.</p>
+</div>
+
+<div class="panel">
+<h3>💬 Buyer ↔ Seller Chat</h3>
+<p>مشتری او دوکاندار مستقیم خبرې کولی شي.</p>
+</div>
+
+<div class="panel">
+<h3>⭐ Reviews & Ratings</h3>
+<p>د محصول او پلورونکي درجه بندي.</p>
+</div>
+
+<div class="panel">
+<h3>↩️ Return / Refund / Dispute</h3>
+<p>د بیرته ستنولو او شکایت سیستم.</p>
+</div>
+
 </section>
+
 </main>
 
 <nav>
-<button id="nav-homeView" class="active" onclick="go('homeView')"><span class="navicon">🏠</span>کور</button>
+<button class="active" id="nav-homeView" onclick="go('homeView')"><span class="navicon">🏠</span>کور</button>
 <button id="nav-shopsView" onclick="go('shopsView')"><span class="navicon">🏪</span>دوکانونه</button>
 <button id="nav-cartView" onclick="go('cartView')"><span class="navicon">🛒</span>Cart</button>
 <button id="nav-sellerView" onclick="go('sellerView')"><span class="navicon">➕</span>دوکان</button>
 <button id="nav-accountView" onclick="go('accountView')"><span class="navicon">👤</span>حساب</button>
 </nav>
+
 <div class="toast" id="toast"></div>
 </div>
+
 <script>
-const ADMIN_EMAIL="owner@ishaqzada.global", ADMIN_PASS="IZ-Admin-2026";
-const seedProducts=[
-{id:1,n:"Premium Smartphone",p:28500,e:"📱",shop:"Kandahar Mobile"},
-{id:2,n:"Luxury Watch",p:4200,e:"⌚",shop:"IZ Fashion"},
+const products=[
+{id:1,n:"Premium Smartphone",p:28500,e:"📱",shop:"Mobile Store"},
+{id:2,n:"Luxury Watch",p:4200,e:"⌚",shop:"Fashion Store"},
 {id:3,n:"Beauty Collection",p:1750,e:"💄",shop:"Beauty House"},
 {id:4,n:"Wireless Headphones",p:2400,e:"🎧",shop:"Tech Market"},
-{id:5,n:"Men's Fashion",p:1950,e:"👔",shop:"Global Style"},
-{id:6,n:"Home Appliance",p:7600,e:"🏠",shop:"Home Center"}];
-function db(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-if(!localStorage.getItem("products")) save("products",seedProducts);
-if(!localStorage.getItem("sellers")) save("sellers",[]);
-if(!localStorage.getItem("orders")) save("orders",[]);
-if(!localStorage.getItem("settings")) save("settings",{feeEnabled:"off",monthlyFee:300});
-let cart=db("cart",[]), currentUser=db("currentUser",null);
-function toast(t){let el=document.getElementById("toast");el.textContent=t;el.classList.add("on");setTimeout(()=>el.classList.remove("on"),2200)}
-function go(id){document.querySelectorAll(".view").forEach(v=>v.classList.remove("show"));document.getElementById(id).classList.add("show");document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));document.getElementById("nav-"+id)?.classList.add("active");renderAll();scrollTo(0,0)}
-function renderProducts(list=db("products",[])){let g=document.getElementById("productsGrid");g.innerHTML=list.map(x=>`<div class="card"><div class="photo">${x.e}</div><div class="p"><b>${x.n}</b><div class="price">${x.p.toLocaleString()} AFN</div><div class="meta">🏪 ${x.shop}</div><button class="btn gold" style="width:100%;margin-top:9px" onclick="addCart(${x.id})">Cart ته</button></div></div>`).join("");document.getElementById("productCount").textContent=list.length+" محصولات"}
-function searchProducts(){let q=document.getElementById("searchInput").value.toLowerCase();let ps=db("products",[]).filter(x=>(x.n+" "+x.shop).toLowerCase().includes(q));renderProducts(ps);go("homeView")}
-function addCart(id){let p=db("products",[]).find(x=>x.id===id);cart.push(p);save("cart",cart);toast("Cart ته اضافه شو");renderCart()}
-function renderCart(){cart=db("cart",[]);document.getElementById("cartCount").textContent=cart.length+" توکي";let el=document.getElementById("cartList");if(!cart.length){el.innerHTML='<div class="panel empty">Cart تش دی.</div>';return}let total=cart.reduce((s,x)=>s+x.p,0);el.innerHTML=cart.map((x,i)=>`<div class="panel row between"><div><b>${x.n}</b><div class="price">${x.p.toLocaleString()} AFN</div></div><button class="btn danger" onclick="removeCart(${i})">حذف</button></div>`).join("")+`<div class="panel"><b>ټول: ${total.toLocaleString()} AFN</b></div>`}
-function removeCart(i){cart.splice(i,1);save("cart",cart);renderCart()}
-function placeOrder(){if(!cart.length)return toast("Cart تش دی");let n=buyerName.value.trim(),p=buyerPhone.value.trim(),a=buyerAddress.value.trim();if(!n||!p||!a)return toast("ټول معلومات ډک کړئ");let orders=db("orders",[]);orders.unshift({id:"IZ"+Date.now().toString().slice(-7),buyer:n,phone:p,address:a,items:cart,total:cart.reduce((s,x)=>s+x.p,0),status:"نوی",date:new Date().toLocaleString()});save("orders",orders);cart=[];save("cart",cart);renderCart();toast("فرمایش ثبت شو")}
-function submitSeller(){let f=document.getElementById("idFile");if(!sellerName.value||!sellerPhone.value||!sellerLocation.value||!shopName.value||!f.files.length)return toast("ټول معلومات او سند اړین دي");let sellers=db("sellers",[]);if(sellers.some(s=>s.phone===sellerPhone.value))return toast("په دې نمبر مخکې دوکان ثبت شوی");sellers.unshift({id:Date.now(),name:sellerName.value,phone:sellerPhone.value,location:sellerLocation.value,idType:idType.value,shop:shopName.value,status:"pending",paid:true,created:Date.now(),documentName:f.files[0].name});save("sellers",sellers);toast("د تایید لپاره واستول شو");renderAll()}
-function renderShops(){let sellers=db("sellers",[]).filter(s=>s.status==="approved");let el=document.getElementById("shopsList");el.innerHTML=sellers.length?sellers.map(s=>`<div class="panel shop"><div class="avatar">${s.shop.slice(0,1)}</div><div style="flex:1"><b>${s.shop}</b><div class="meta">${s.location}</div></div><span class="badge verified">✓ Verified</span></div>`).join(""):'<div class="panel empty">تراوسه تایید شوی دوکان نشته.</div>'}
-function renderMyShop(){let sellers=db("sellers",[]);let s=sellers.find(x=>currentUser&&x.phone===currentUser.phone)||sellers[0];document.getElementById("myShopStatus").innerHTML=s?`<b>${s.shop}</b><br><span class="badge ${s.status==="approved"?"verified":s.status==="suspended"?"suspended":"pending"}">${s.status}</span>`:"تر اوسه دوکان نشته."}
-function register(){let e=loginEmail.value.trim(),p=loginPassword.value;if(!e||!p)return toast("ایمیل او پاسورډ ولیکئ");currentUser={email:e,role:"customer"};save("currentUser",currentUser);toast("حساب جوړ شو");renderAccount()}
-function login(){let e=loginEmail.value.trim(),p=loginPassword.value;if(e===ADMIN_EMAIL&&p===ADMIN_PASS){currentUser={email:e,role:"admin"};save("currentUser",currentUser);toast("Admin ته ننوتل وشول")}else if(e&&p){currentUser={email:e,role:"customer"};save("currentUser",currentUser);toast("حساب ته ننوتل وشول")}else return toast("معلومات ولیکئ");renderAccount()}
-function logout(){currentUser=null;localStorage.removeItem("currentUser");renderAccount()}
-function renderAccount(){currentUser=db("currentUser",null);let st=document.getElementById("accountState"),ad=document.getElementById("adminPanel");if(currentUser){st.classList.remove("hide");st.innerHTML=`<div class="row between"><div><b>${currentUser.email}</b><div class="meta">${currentUser.role}</div></div><button class="btn danger" onclick="logout()">وتل</button></div>`}else st.classList.add("hide");ad.classList.toggle("hide",currentUser?.role!=="admin");if(currentUser?.role==="admin")renderAdmin()}
-function renderAdmin(){let set=db("settings",{feeEnabled:"off",monthlyFee:300});feeEnabled.value=set.feeEnabled;monthlyFee.value=set.monthlyFee;let sellers=db("sellers",[]);adminSellers.innerHTML=sellers.length?sellers.map(s=>`<div class="panel" style="background:#f7f9fb"><b>${s.shop}</b><div class="meta">${s.name} • ${s.phone} • ${s.idType} • ${s.documentName}</div><div class="row" style="margin-top:9px"><button class="btn ok" onclick="sellerAction(${s.id},'approved')">تایید</button><button class="btn danger" onclick="sellerAction(${s.id},'suspended')">بند</button><span class="badge">${s.status}</span></div></div>`).join(""):'<div class="empty">هیڅ غوښتنه نشته.</div>';let orders=db("orders",[]);adminOrders.innerHTML=orders.length?orders.map(o=>`<div class="panel" style="background:#f7f9fb"><b>${o.id} — ${o.total.toLocaleString()} AFN</b><div class="meta">${o.buyer} • ${o.phone} • ${o.status}</div><select onchange="orderStatus('${o.id}',this.value)" style="margin-top:8px;padding:8px;border-radius:10px"><option>نوی</option><option>تایید</option><option>په لاره</option><option>رسول شوی</option><option>رد</option></select></div>`).join(""):'<div class="empty">فرمایش نشته.</div>'}
-function sellerAction(id,status){let s=db("sellers",[]);let x=s.find(v=>v.id===id);if(x)x.status=status;save("sellers",s);renderAll();toast("حالت بدل شو")}
-function orderStatus(id,status){let a=db("orders",[]);let x=a.find(o=>o.id===id);if(x)x.status=status;save("orders",a);toast("Order حالت بدل شو")}
-function saveAdminSettings(){save("settings",{feeEnabled:feeEnabled.value,monthlyFee:+monthlyFee.value||0});toast("تنظیمات خوندي شول")}
-function enforceFees(){let set=db("settings",{feeEnabled:"off"});if(set.feeEnabled!=="on")return;let sellers=db("sellers",[]),now=Date.now(),month=30*24*3600*1000,changed=false;sellers.forEach(s=>{if(s.status==="approved"&&!s.paid&&now-s.created>month){s.status="suspended";changed=true}});if(changed)save("sellers",sellers)}
-function renderAll(){enforceFees();renderProducts();renderCart();renderShops();renderMyShop();renderAccount()}
-let deferredPrompt;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;installBtn.style.display="block"});installBtn.onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null}else{toast("iPhone: Share → Add to Home Screen")}}
-if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
-renderAll();
+{id:5,n:"Men Fashion",p:1950,e:"👔",shop:"Global Style"},
+{id:6,n:"Home Appliance",p:7600,e:"🏠",shop:"Home Center"}
+];
+
+let cart=[];
+
+function toast(t){
+const x=document.getElementById("toast");
+x.textContent=t;
+x.classList.add("on");
+setTimeout(()=>x.classList.remove("on"),2000);
+}
+
+function go(id){
+document.querySelectorAll(".view").forEach(x=>x.classList.remove("show"));
+document.getElementById(id).classList.add("show");
+
+document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+document.getElementById("nav-"+id).classList.add("active");
+
+window.scrollTo(0,0);
+}
+
+function renderProducts(list=products){
+const g=document.getElementById("productsGrid");
+
+g.innerHTML=list.map(x=>`
+<div class="card">
+<div class="photo">${x.e}</div>
+<div class="p">
+<b>${x.n}</b>
+<div class="price">${x.p.toLocaleString()} AFN</div>
+<div class="meta">🏪 ${x.shop}</div>
+<button class="btn gold" style="width:100%;margin-top:9px" onclick="addCart(${x.id})">🛒 Cart ته</button>
+</div>
+</div>
+`).join("");
+
+document.getElementById("productCount").textContent=list.length+" محصولات";
+}
+
+function addCart(id){
+const p=products.find(x=>x.id===id);
+cart.push(p);
+renderCart();
+toast("Cart ته اضافه شو");
+}
+
+function renderCart(){
+document.getElementById("cartCount").textContent=cart.length;
+
+if(!cart.length){
+document.getElementById("cartList").innerHTML="Cart تش دی.";
+return;
+}
+
+let total=cart.reduce((a,b)=>a+b.p,0);
+
+document.getElementById("cartList").innerHTML=
+cart.map((x,i)=>`
+<p>
+<b>${x.n}</b> — ${x.p.toLocaleString()} AFN
+<button onclick="removeCart(${i})">❌</button>
+</p>
+`).join("")+
+`<hr><b>ټول قیمت: ${total.toLocaleString()} AFN</b>`;
+}
+
+function removeCart(i){
+cart.splice(i,1);
+renderCart();
+}
+
+function searchProducts(){
+let q=document.getElementById("searchInput").value.toLowerCase();
+renderProducts(products.filter(x=>
+(x.n+" "+x.shop).toLowerCase().includes(q)
+));
+}
+
+function setLang(l){
+document.documentElement.lang=l;
+document.documentElement.dir=l==="en"?"ltr":"rtl";
+
+const input=document.getElementById("searchInput");
+
+if(l==="en"){
+input.placeholder="Search product, shop or category";
+toast("Language changed to English");
+}
+else if(l==="fa"){
+input.placeholder="محصول، فروشگاه یا دسته‌بندی را جستجو کنید";
+toast("زبان به دری تغییر کرد");
+}
+else if(l==="ar"){
+input.placeholder="ابحث عن منتج أو متجر أو فئة";
+toast("تم تغيير اللغة إلى العربية");
+}
+else{
+input.placeholder="محصول، دوکان یا کټګوري ولټوئ";
+toast("ژبه پښتو شوه");
+}
+}
+
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt",e=>{
+e.preventDefault();
+deferredPrompt=e;
+});
+
+document.getElementById("installBtn").onclick=async()=>{
+if(deferredPrompt){
+deferredPrompt.prompt();
+await deferredPrompt.userChoice;
+deferredPrompt=null;
+}else{
+toast("iPhone: Share → Add to Home Screen");
+}
+};
+
+if("serviceWorker" in navigator){
+navigator.serviceWorker.register("sw.js");
+}
+
+renderProducts();
 </script>
+
 </body>
 </html>
