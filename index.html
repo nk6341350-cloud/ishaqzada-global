@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="IshaqZada">
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon.svg?v=8">
+  <link rel="apple-touch-icon" href="icon.svg?v=9">
   <title>IshaqZada Global</title>
   <style>
     :root{--navy:#071426;--navy2:#0b1f39;--gold:#d7a83f;--cream:#f6f3ec;--card:#fff;--muted:#6c7580;--danger:#c73e4d;--ok:#14966c}
@@ -33,7 +33,7 @@
 <div class="app">
 <header>
   <div class="brand">
-    <div class="logo"><div class="mark" style="padding:0;overflow:hidden;background:#fff"><img src="icon.svg?v=8" alt="IshaqZada Global" style="width:100%;height:100%;object-fit:cover"></div><div><h1>IshaqZada Global</h1><small>نړیوال آنلاین بازار</small></div></div>
+    <div class="logo"><div class="mark" style="padding:0;overflow:hidden;background:#fff"><img src="icon.svg?v=9" alt="IshaqZada Global" style="width:100%;height:100%;object-fit:cover"></div><div><h1>IshaqZada Global</h1><small>نړیوال آنلاین بازار</small></div></div>
     <button type="button" class="pill" id="installBtn">⬇ نصب</button>
   </div>
   <div class="search"><input id="searchInput" placeholder="محصول، دوکان یا کټګوري ولټوئ"><button type="button" onclick="searchProducts()">لټون</button></div>
@@ -95,11 +95,35 @@
     <h3>زما دوکان</h3>
     <div id="myShopStatus" class="note">تر اوسه دوکان نشته.</div>
   </div>
+
+  <div id="productAddPanel" class="panel hide">
+    <h3>➕ نوی جنس / اعلان پورته کړه</h3>
+    <p class="note">د دوکاندار جنس لومړی د Admin تایید ته ځي. د تایید وروسته عامو خلکو ته ښکاري.</p>
+    <div class="field"><label>دوکان</label><select id="productShop"></select></div>
+    <div class="field"><label>د جنس نوم</label><input id="productName" placeholder="مثلاً: شامپو، موبایل، کالي..."></div>
+    <div class="field"><label>کټګوري</label><select id="productCategory">
+      <option value="mobile">موبایل</option><option value="fashion">کالي</option><option value="beauty">کاسمیټکس</option>
+      <option value="house-sale">کور په خرڅ</option><option value="house-rent">کور په کرایه</option><option value="house-mortgage">کور په ګروي</option>
+      <option value="car-new">نوی موټر</option><option value="car-used">زوړ موټر</option><option value="services">خدمات</option>
+      <option value="electronics">الکترونیک</option><option value="food">خوراکي</option><option value="other">نور اجناس</option>
+    </select></div>
+    <div class="field"><label>قیمت (AFN)</label><input id="productPrice" type="number" min="0"></div>
+    <div class="field"><label>موجودي / تعداد</label><input id="productQty" type="number" min="0" value="1"></div>
+    <div class="field"><label>رنګ</label><input id="productColor" placeholder="اختیاري"></div>
+    <div class="field"><label>سایز</label><input id="productSize" placeholder="اختیاري"></div>
+    <div class="field"><label>تشریح</label><textarea id="productDescription" placeholder="د جنس لنډ معلومات"></textarea></div>
+    <div class="field"><label>د جنس عکس</label><input id="productImage" type="file" accept="image/*"></div>
+    <button type="button" class="btn gold" style="width:100%" onclick="submitProduct()">جنس ثبت کړه</button>
+  </div>
+
+  <div id="myProductsPanel" class="panel hide">
+    <h3>زما محصولات</h3><div id="myProductsList"></div>
+  </div>
 </section>
 
 <section id="accountView" class="view">
   <div class="panel" style="text-align:center">
-    <img id="profileBrandLogo" src="icon.svg?v=8" alt="IshaqZada Global" style="width:92px;height:92px;border-radius:24px;object-fit:cover;box-shadow:0 6px 20px #0002">
+    <img id="profileBrandLogo" src="icon.svg?v=9" alt="IshaqZada Global" style="width:92px;height:92px;border-radius:24px;object-fit:cover;box-shadow:0 6px 20px #0002">
     <h3 style="margin:10px 0 2px">IshaqZada Global</h3>
     <div class="note">د اپلیکیشن او پروفایل رسمي لوګو</div>
   </div>
@@ -119,6 +143,7 @@
       <p class="note">که فیس فعال وي او دوکاندار د میاشتې پیسې ورنه کړي، دوکان Suspended کېږي. د تادیې له تایید وروسته بېرته Active کېږي.</p>
     </div>
     <div class="panel"><h3>د دوکاندارانو تایید</h3><div id="adminSellers"></div></div>
+    <div class="panel"><h3>د اجناسو / اعلانونو تایید</h3><div id="adminProducts"></div></div>
     <div class="panel"><h3>فرمایشونه</h3><div id="adminOrders"></div></div>
   </div>
 </section>
@@ -143,36 +168,51 @@
 </div>
 <script>
 const ADMIN_EMAIL="nk6341350@gmail.com", ADMIN_PASS="IZ-Admin-2026";
-const seedProducts=[
-{id:1,n:"Premium Smartphone",p:28500,e:"📱",shop:"Kandahar Mobile",cat:"mobile"},
-{id:2,n:"Luxury Watch",p:4200,e:"⌚",shop:"IZ Fashion",cat:"fashion"},
-{id:3,n:"Beauty Collection",p:1750,e:"💄",shop:"Beauty House",cat:"beauty"},
-{id:4,n:"Wireless Headphones",p:2400,e:"🎧",shop:"Tech Market",cat:"electronics"},
-{id:5,n:"Men's Fashion",p:1950,e:"👔",shop:"Global Style",cat:"fashion"},
-{id:6,n:"Home Appliance",p:7600,e:"🏠",shop:"Home Center",cat:"electronics"}];
+const seedProducts=[];
 function db(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 if(!localStorage.getItem("products")) save("products",seedProducts);
 if(!localStorage.getItem("sellers")) save("sellers",[]);
 if(!localStorage.getItem("orders")) save("orders",[]);
 if(!localStorage.getItem("settings")) save("settings",{feeEnabled:"off",monthlyFee:300});
+if(!localStorage.getItem("iz_demo_cleanup_v2")){
+  let old=db("products",[]);
+  const demoShops=["Kandahar Mobile","IZ Fashion","Beauty House","Tech Market","Global Style","Home Center"];
+  old=old.filter(x=>!([1,2,3,4,5,6].includes(Number(x.id))&&demoShops.includes(x.shop)));
+  save("products",old);localStorage.setItem("iz_demo_cleanup_v2","1");
+}
 let cart=db("cart",[]), currentUser=db("currentUser",null);
 function toast(t){let el=document.getElementById("toast");el.textContent=t;el.classList.add("on");setTimeout(()=>el.classList.remove("on"),2200)}
 function go(id){document.querySelectorAll(".view").forEach(v=>v.classList.remove("show"));document.getElementById(id).classList.add("show");document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));document.getElementById("nav-"+id)?.classList.add("active");renderAll();scrollTo(0,0)}
-function renderProducts(list=db("products",[])){let g=document.getElementById("productsGrid");g.innerHTML=list.map(x=>`<div class="card"><div class="photo">${x.e}</div><div class="p"><b>${x.n}</b><div class="price">${x.p.toLocaleString()} AFN</div><div class="meta">🏪 ${x.shop}</div><button type="button" class="btn gold" style="width:100%;margin-top:9px" onclick="addCart(${x.id})">Cart ته</button></div></div>`).join("");document.getElementById("productCount").textContent=list.length+" محصولات"}
-function searchProducts(){let q=document.getElementById("searchInput").value.toLowerCase();let ps=db("products",[]).filter(x=>(x.n+" "+x.shop).toLowerCase().includes(q));renderProducts(ps);go("homeView")}
+function productPhoto(x){return x.image?`<img src="${x.image}" alt="" style="width:100%;height:100%;object-fit:cover">`:(x.e||"📦")}
+function renderProducts(list){if(!list)list=db("products",[]).filter(x=>x.status==="approved");let g=document.getElementById("productsGrid");g.innerHTML=list.length?list.map(x=>`<div class="card"><div class="photo">${productPhoto(x)}</div><div class="p"><b>${x.n}</b><div class="price">${Number(x.p).toLocaleString()} AFN</div><div class="meta">🏪 ${x.shop}</div><button type="button" class="btn gold" style="width:100%;margin-top:9px" onclick="addCart(${x.id})">Cart ته</button></div></div>`).join(""):'<div class="panel empty" style="grid-column:1/-1">تراوسه تایید شوی جنس نشته.</div>';document.getElementById("productCount").textContent=list.length+" محصولات"}
+function searchProducts(){let q=document.getElementById("searchInput").value.toLowerCase();let ps=db("products",[]).filter(x=>x.status==="approved"&&(x.n+" "+x.shop+" "+(x.description||"")).toLowerCase().includes(q));renderProducts(ps);go("homeView") }
 function addCart(id){let p=db("products",[]).find(x=>x.id===id);cart.push(p);save("cart",cart);toast("Cart ته اضافه شو");renderCart()}
 function renderCart(){cart=db("cart",[]);document.getElementById("cartCount").textContent=cart.length+" توکي";let el=document.getElementById("cartList");if(!cart.length){el.innerHTML='<div class="panel empty">Cart تش دی.</div>';return}let total=cart.reduce((s,x)=>s+x.p,0);el.innerHTML=cart.map((x,i)=>`<div class="panel row between"><div><b>${x.n}</b><div class="price">${x.p.toLocaleString()} AFN</div></div><button type="button" class="btn danger" onclick="removeCart(${i})">حذف</button></div>`).join("")+`<div class="panel"><b>ټول: ${total.toLocaleString()} AFN</b></div>`}
 function removeCart(i){cart.splice(i,1);save("cart",cart);renderCart()}
 function placeOrder(){if(!cart.length)return toast("Cart تش دی");let n=buyerName.value.trim(),p=buyerPhone.value.trim(),a=buyerAddress.value.trim();if(!n||!p||!a)return toast("ټول معلومات ډک کړئ");let orders=db("orders",[]);orders.unshift({id:"IZ"+Date.now().toString().slice(-7),buyer:n,phone:p,address:a,items:cart,total:cart.reduce((s,x)=>s+x.p,0),status:"نوی",date:new Date().toLocaleString()});save("orders",orders);cart=[];save("cart",cart);renderCart();toast("فرمایش ثبت شو")}
-function submitSeller(){let f=document.getElementById("idFile");if(!sellerName.value||!sellerPhone.value||!sellerLocation.value||!shopName.value||!f.files.length)return toast("ټول معلومات او سند اړین دي");let sellers=db("sellers",[]);if(sellers.some(s=>s.phone===sellerPhone.value))return toast("په دې نمبر مخکې دوکان ثبت شوی");sellers.unshift({id:Date.now(),name:sellerName.value,phone:sellerPhone.value,location:sellerLocation.value,idType:idType.value,shop:shopName.value,status:"pending",paid:true,created:Date.now(),documentName:f.files[0].name});save("sellers",sellers);toast("د تایید لپاره واستول شو");renderAll()}
+function submitSeller(){if(!currentUser)return toast("لومړی حساب ته ننوزئ");let f=document.getElementById("idFile");if(!sellerName.value||!sellerPhone.value||!sellerLocation.value||!shopName.value||!f.files.length)return toast("ټول معلومات او سند اړین دي");let sellers=db("sellers",[]);if(sellers.some(s=>s.phone===sellerPhone.value))return toast("په دې نمبر مخکې دوکان ثبت شوی");sellers.unshift({id:Date.now(),name:sellerName.value,phone:sellerPhone.value,location:sellerLocation.value,idType:idType.value,shop:shopName.value,status:"pending",paid:true,created:Date.now(),documentName:f.files[0].name,ownerEmail:currentUser.email});save("sellers",sellers);toast("د تایید لپاره واستول شو");renderAll()}
 function renderShops(){let sellers=db("sellers",[]).filter(s=>s.status==="approved");let el=document.getElementById("shopsList");el.innerHTML=sellers.length?sellers.map(s=>`<div class="panel shop"><div class="avatar">${s.shop.slice(0,1)}</div><div style="flex:1"><b>${s.shop}</b><div class="meta">${s.location}</div></div><span class="badge verified">✓ Verified</span></div>`).join(""):'<div class="panel empty">تراوسه تایید شوی دوکان نشته.</div>'}
-function renderMyShop(){let sellers=db("sellers",[]);let s=sellers.find(x=>currentUser&&x.phone===currentUser.phone)||sellers[0];document.getElementById("myShopStatus").innerHTML=s?`<b>${s.shop}</b><br><span class="badge ${s.status==="approved"?"verified":s.status==="suspended"?"suspended":"pending"}">${s.status}</span>`:"تر اوسه دوکان نشته."}
+function renderMyShop(){
+  let sellers=db("sellers",[]),status=document.getElementById("myShopStatus"),addPanel=document.getElementById("productAddPanel"),myPanel=document.getElementById("myProductsPanel"),shopSel=document.getElementById("productShop");
+  let mine=currentUser?sellers.filter(s=>String(s.ownerEmail||"").toLowerCase()===String(currentUser.email||"").toLowerCase()):[];
+  if(currentUser?.role==="admin") mine=sellers;
+  let s=mine[0];status.innerHTML=s?`<b>${s.shop}</b><br><span class="badge ${s.status==="approved"?"verified":s.status==="suspended"?"suspended":"pending"}">${s.status}</span>`:"تر اوسه دوکان نشته.";
+  let allowed=currentUser?.role==="admin"?sellers.filter(s=>s.status==="approved"):mine.filter(s=>s.status==="approved");
+  if(currentUser?.role==="admin")allowed=[{shop:"IshaqZada Global",status:"approved",ownerEmail:ADMIN_EMAIL},...allowed];
+  if(allowed.length){addPanel.classList.remove("hide");myPanel.classList.remove("hide");shopSel.innerHTML=allowed.map(x=>`<option value="${x.shop}">${x.shop}</option>`).join("")}else{addPanel.classList.add("hide");myPanel.classList.add("hide")}
+  renderMyProducts();
+}
+function compressImage(file,maxSize=900,quality=.78){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{let w=img.width,h=img.height,s=Math.min(1,maxSize/Math.max(w,h));w=Math.round(w*s);h=Math.round(h*s);const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);resolve(c.toDataURL("image/jpeg",quality))};img.onerror=reject;img.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}
+async function submitProduct(){if(!currentUser)return toast("لومړی حساب ته ننوزئ");let name=productName.value.trim(),price=Number(productPrice.value),qty=Number(productQty.value||0),file=productImage.files[0];if(!name||!price||!file)return toast("نوم، قیمت او عکس اړین دي");let image;try{image=await compressImage(file)}catch{return toast("عکس ونه لوستل شو")};let products=db("products",[]),status=currentUser.role==="admin"?"approved":"pending";products.unshift({id:Date.now(),n:name,p:price,e:"📦",shop:productShop.value,cat:productCategory.value,qty,color:productColor.value.trim(),size:productSize.value.trim(),description:productDescription.value.trim(),image,status,ownerEmail:currentUser.email,created:Date.now()});try{save("products",products)}catch(e){return toast("عکس ډېر غټ دی؛ کوچنی عکس وکاروئ")};productName.value="";productPrice.value="";productQty.value="1";productColor.value="";productSize.value="";productDescription.value="";productImage.value="";toast(status==="approved"?"جنس خپور شو":"جنس د Admin تایید ته واستول شو");renderAll()}
+function renderMyProducts(){let el=document.getElementById("myProductsList");if(!el)return;let products=db("products",[]),list=currentUser?.role==="admin"?products:products.filter(p=>String(p.ownerEmail||"").toLowerCase()===String(currentUser?.email||"").toLowerCase());el.innerHTML=list.length?list.map(p=>`<div class="panel" style="background:#f7f9fb"><div class="row"><div style="width:58px;height:58px;border-radius:12px;overflow:hidden;background:#eef1f4;display:grid;place-items:center">${productPhoto(p)}</div><div style="flex:1"><b>${p.n}</b><div class="meta">${Number(p.p).toLocaleString()} AFN • ${p.shop}</div><span class="badge ${p.status==="approved"?"verified":p.status==="suspended"?"suspended":"pending"}">${p.status}</span></div></div></div>`).join(""):'<div class="empty">تر اوسه جنس نشته.</div>'}
+function productAction(id,status){let p=db("products",[]),x=p.find(v=>v.id===id);if(x)x.status=status;save("products",p);renderAll();toast("د جنس حالت بدل شو")}
+function deleteProduct(id){let p=db("products",[]).filter(v=>v.id!==id);save("products",p);renderAll();toast("جنس حذف شو")}
 function register(){let e=loginEmail.value.trim(),p=loginPassword.value;if(!e||!p)return toast("ایمیل او پاسورډ ولیکئ");currentUser={email:e,role:"customer"};save("currentUser",currentUser);toast("حساب جوړ شو");renderAccount()}
 function login(){let e=loginEmail.value.trim().toLowerCase(),p=loginPassword.value;if(e===ADMIN_EMAIL.toLowerCase()&&p===ADMIN_PASS){currentUser={email:ADMIN_EMAIL,role:"admin"};save("currentUser",currentUser);toast("Admin ته ننوتل وشول")}else if(e&&p){currentUser={email:e,role:"customer"};save("currentUser",currentUser);toast("حساب ته ننوتل وشول")}else return toast("معلومات ولیکئ");renderAccount()}
 function logout(){currentUser=null;localStorage.removeItem("currentUser");renderAccount()}
 function renderAccount(){currentUser=db("currentUser",null);if(currentUser&&String(currentUser.email||"").trim().toLowerCase()===ADMIN_EMAIL.toLowerCase()&&currentUser.role!=="admin"){currentUser.role="admin";save("currentUser",currentUser);}let st=document.getElementById("accountState"),ad=document.getElementById("adminPanel");if(currentUser){st.classList.remove("hide");st.innerHTML=`<div class="row between"><div><b>${currentUser.email}</b><div class="meta">${currentUser.role}</div></div><button type="button" class="btn danger" onclick="logout()">وتل</button></div>`}else st.classList.add("hide");ad.classList.toggle("hide",currentUser?.role!=="admin");if(currentUser?.role==="admin")renderAdmin()}
-function renderAdmin(){let set=db("settings",{feeEnabled:"off",monthlyFee:300});feeEnabled.value=set.feeEnabled;monthlyFee.value=set.monthlyFee;let sellers=db("sellers",[]);adminSellers.innerHTML=sellers.length?sellers.map(s=>`<div class="panel" style="background:#f7f9fb"><b>${s.shop}</b><div class="meta">${s.name} • ${s.phone} • ${s.idType} • ${s.documentName}</div><div class="row" style="margin-top:9px"><button type="button" class="btn ok" onclick="sellerAction(${s.id},'approved')">تایید</button><button type="button" class="btn danger" onclick="sellerAction(${s.id},'suspended')">بند</button><span class="badge">${s.status}</span></div></div>`).join(""):'<div class="empty">هیڅ غوښتنه نشته.</div>';let orders=db("orders",[]);adminOrders.innerHTML=orders.length?orders.map(o=>`<div class="panel" style="background:#f7f9fb"><b>${o.id} — ${o.total.toLocaleString()} AFN</b><div class="meta">${o.buyer} • ${o.phone} • ${o.status}</div><select onchange="orderStatus('${o.id}',this.value)" style="margin-top:8px;padding:8px;border-radius:10px"><option>نوی</option><option>تایید</option><option>په لاره</option><option>رسول شوی</option><option>رد</option></select></div>`).join(""):'<div class="empty">فرمایش نشته.</div>'}
+function renderAdmin(){let set=db("settings",{feeEnabled:"off",monthlyFee:300});feeEnabled.value=set.feeEnabled;monthlyFee.value=set.monthlyFee;let sellers=db("sellers",[]);adminSellers.innerHTML=sellers.length?sellers.map(s=>`<div class="panel" style="background:#f7f9fb"><b>${s.shop}</b><div class="meta">${s.name} • ${s.phone} • ${s.idType} • ${s.documentName}</div><div class="row" style="margin-top:9px"><button type="button" class="btn ok" onclick="sellerAction(${s.id},'approved')">تایید</button><button type="button" class="btn danger" onclick="sellerAction(${s.id},'suspended')">بند</button><span class="badge">${s.status}</span></div></div>`).join(""):'<div class="empty">هیڅ غوښتنه نشته.</div>';let products=db("products",[]);adminProducts.innerHTML=products.length?products.map(p=>`<div class="panel" style="background:#f7f9fb"><div class="row"><div style="width:64px;height:64px;border-radius:12px;overflow:hidden;background:#eef1f4;display:grid;place-items:center">${productPhoto(p)}</div><div style="flex:1"><b>${p.n}</b><div class="meta">${Number(p.p).toLocaleString()} AFN • ${p.shop}</div><div class="meta">${p.ownerEmail||""}</div></div></div><div class="row" style="margin-top:9px"><button type="button" class="btn ok" onclick="productAction(${p.id},'approved')">تایید</button><button type="button" class="btn danger" onclick="productAction(${p.id},'suspended')">بند</button><button type="button" class="btn light" onclick="deleteProduct(${p.id})">حذف</button><span class="badge">${p.status}</span></div></div>`).join(""):'<div class="empty">هیڅ جنس د تایید لپاره نشته.</div>';let orders=db("orders",[]);adminOrders.innerHTML=orders.length?orders.map(o=>`<div class="panel" style="background:#f7f9fb"><b>${o.id} — ${o.total.toLocaleString()} AFN</b><div class="meta">${o.buyer} • ${o.phone} • ${o.status}</div><select onchange="orderStatus('${o.id}',this.value)" style="margin-top:8px;padding:8px;border-radius:10px"><option>نوی</option><option>تایید</option><option>په لاره</option><option>رسول شوی</option><option>رد</option></select></div>`).join(""):'<div class="empty">فرمایش نشته.</div>'}
 function sellerAction(id,status){let s=db("sellers",[]);let x=s.find(v=>v.id===id);if(x)x.status=status;save("sellers",s);renderAll();toast("حالت بدل شو")}
 function orderStatus(id,status){let a=db("orders",[]);let x=a.find(o=>o.id===id);if(x)x.status=status;save("orders",a);toast("Order حالت بدل شو")}
 function saveAdminSettings(){save("settings",{feeEnabled:feeEnabled.value,monthlyFee:+monthlyFee.value||0});toast("تنظیمات خوندي شول")}
@@ -214,14 +254,7 @@ const st=document.querySelectorAll("#homeView .section-title");if(st[0]){st[0].q
 document.querySelectorAll(".cat").forEach(btn=>{const m=(btn.getAttribute("onclick")||"").match(/openCategory\('([^']+)'\)/);if(m){const sp=btn.querySelector("span");if(sp)sp.textContent=(categoryNames[l]||categoryNames.ps)[m[1]]||sp.textContent;}});
 toast(l==="en"?"Language changed":l==="fa"?"زبان تغییر کرد":l==="ar"?"تم تغيير اللغة":"ژبه بدله شوه");
 }
-function openCategory(key){
-const lang=currentLang||"ps";
-document.getElementById("categoryTitle").textContent=(categoryNames[lang]||categoryNames.ps)[key]||key;
-const real=db("products",[]).filter(p=>p.cat===key);
-let items=[];
-if(real.length){items=real.map(x=>`<div class="card"><div class="photo">${x.e||"📦"}</div><div class="p"><b>${x.n}</b><div class="price">${Number(x.p).toLocaleString()} AFN</div><div class="meta">🏪 ${x.shop}</div><button type="button" class="btn gold" style="width:100%;margin-top:9px" onclick="addCart(${x.id})">${lang==="en"?"Add to Cart":lang==="fa"?"افزودن به سبد":lang==="ar"?"أضف إلى السلة":"Cart ته"}</button></div></div>`);}
-else{const demo=categoryDemo[key]||[["📦",(categoryNames[lang]||categoryNames.ps)[key],"Global","—"]];items=demo.map(x=>`<div class="card"><div class="photo">${x[0]}</div><div class="p"><b>${x[1]}</b><div class="price">${x[3]}</div><div class="meta">📍 ${x[2]}</div><button type="button" class="btn gold" style="width:100%;margin-top:9px" onclick="toast('${lang==="en"?"Listing opened":lang==="fa"?"اعلان باز شد":lang==="ar"?"تم فتح الإعلان":"اعلان خلاص شو"}')">${lang==="en"?"View":lang==="fa"?"مشاهده":lang==="ar"?"عرض":"وګورئ"}</button></div></div>`);}
-document.getElementById("categoryList").innerHTML=items.join("");go("categoryView");
+function openCategory(key){const lang=currentLang||"ps";document.getElementById("categoryTitle").textContent=(categoryNames[lang]||categoryNames.ps)[key]||key;const real=db("products",[]).filter(p=>p.status==="approved"&&p.cat===key);let items=real.map(x=>`<div class="card"><div class="photo">${productPhoto(x)}</div><div class="p"><b>${x.n}</b><div class="price">${Number(x.p).toLocaleString()} AFN</div><div class="meta">🏪 ${x.shop}</div><button type="button" class="btn gold" style="width:100%;margin-top:9px" onclick="addCart(${x.id})">${lang==="en"?"Add to Cart":lang==="fa"?"افزودن به سبد":lang==="ar"?"أضف إلى السلة":"Cart ته"}</button></div></div>`);document.getElementById("categoryList").innerHTML=items.length?items.join(""):'<div class="panel empty" style="grid-column:1/-1">په دې کټګورۍ کې تراوسه تایید شوی اعلان نشته.</div>';go("categoryView");
 }
 function cat(q){document.getElementById("searchInput").value=q;searchProducts()}
 function info(q){toast(q)}
