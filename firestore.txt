@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() &&
+             request.auth.token.email == "nk6341350@gmail.com";
+    }
+
+    // Shared marketplace data.
+    match /appData/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Private seller verification/KYC.
+    // Seller can create/read their own request.
+    // Admin can read all and change approval status.
+    match /sellerRequests/{uid} {
+      allow create: if signedIn() &&
+                    request.auth.uid == uid &&
+                    request.resource.data.ownerUid == request.auth.uid;
+
+      allow read: if isAdmin() ||
+                  (signedIn() && request.auth.uid == uid);
+
+      allow update: if isAdmin() || (
+        signedIn() &&
+        request.auth.uid == uid &&
+        request.resource.data.ownerUid == request.auth.uid &&
+        request.resource.data.status == "pending"
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // Public shop profile only — NO document/selfie data here.
+    match /publicSellers/{uid} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
