@@ -827,10 +827,12 @@ body.iz-public-shop .app{padding-bottom:20px!important}
     let products=db('products',[]),existing=editingProductId?products.find(p=>String(p.id)===String(editingProductId)):null;
     const files=Array.from(productImage.files||[]),name=productName.value.trim(),c=productCategory.value,s=productSubcategory.value||'',type=(['home','vehicles','animals','services'].includes(c)&&!['furniture','home-appliances'].includes(s))?'retail':saleType.value,qty=Number(productQty.value||0),rp=Number(retailPrice.value||0),wp=Number(wholesalePrice.value||0),wm=Number(wholesaleMinQty.value||0);
     if(!name)return toast('د جنس نوم اړین دی');if(!existing&&!files.length)return toast('لږ تر لږه یو عکس انتخاب کړئ');if(files.length>6)return toast('تر ۶ ډېر عکسونه مه انتخابوئ');if(!rp&&type!=='wholesale')return toast('قیمت ولیکئ');if(type==='wholesale'&&(!wp||!wm))return toast('عمده قیمت او مقدار ولیکئ');if(type==='both'&&(!rp||!wp||!wm))return toast('ټول قیمتونه ولیکئ');
-    try{toast(editingProductId?'جنس اصلاح کېږي...':'جنس ثبتېږي...');let images=existing?productImages(existing):[];if(files.length){images=[];for(const f of files)images.push(await compressImage(f,420,.42))}
-      let obj={...(existing||{}),id:existing?.id||Date.now(),n:name,p:type==='wholesale'?wp:rp,retailPrice:rp,wholesalePrice:wp,wholesaleMinQty:wm,saleType:type,e:'📦',shop:shop.shop,cat:c,subcategory:s,qty:(['home','vehicles','services'].includes(c)&&!['furniture','home-appliances'].includes(s))?1:qty,color:productColor.value.trim(),size:productSize.value.trim(),description:productDescription.value.trim(),categoryDetails:collectSpecific(),specs:collectSpecific(),images:images.slice(0,6),image:images[0]||'',status:'approved',ownerEmail:currentUser.email,ownerUid:currentUser.uid,sellerWhatsapp:shop.whatsapp||shop.phone||'',created:existing?.created||Date.now(),updatedAt:Date.now()};
-      if(window.compactProductForCloud)obj=await window.compactProductForCloud(obj);if(!window.firebaseSaveProduct)throw new Error('cloud-unavailable');await window.firebaseSaveProduct(obj);const i=products.findIndex(p=>String(p.id)===String(obj.id));if(i>=0)products[i]=obj;else products.unshift(obj);localStorage.setItem('products',JSON.stringify(products));cancelProductEdit(true);renderSpecific();renderAll();toast(existing?'جنس اصلاح شو':'جنس آنلاین خپور شو')
-    }catch(e){console.error(e);toast('جنس آنلاین ثبت نه شو — انټرنېټ/اجازه وګوره')}
+    try{toast(editingProductId?'جنس اصلاح کېږي...':'جنس ثبتېږي...');let images=existing?productImages(existing):[];
+      const newId=existing?.id||Date.now();
+      if(files.length){images=[];for(let n=0;n<files.length;n++){const f=files[n];let u='';try{if(window.firebaseUploadProduct)u=await promiseTimeout(window.firebaseUploadProduct(f,`productImages/${currentUser.uid}/${newId}-${n}-${Date.now()}.jpg`),20000)}catch(upErr){console.warn('Storage upload failed, using compact Firestore image',upErr)}if(!u)u=await compressImage(f,260,.30);images.push(u)}}
+      let obj={...(existing||{}),id:newId,n:name,p:type==='wholesale'?wp:rp,retailPrice:rp,wholesalePrice:wp,wholesaleMinQty:wm,saleType:type,e:'📦',shop:shop.shop,cat:c,subcategory:s,qty:(['home','vehicles','services'].includes(c)&&!['furniture','home-appliances'].includes(s))?1:qty,color:productColor.value.trim(),size:productSize.value.trim(),description:productDescription.value.trim(),categoryDetails:collectSpecific(),specs:collectSpecific(),images:images.slice(0,6),image:images[0]||'',status:'approved',ownerEmail:currentUser.email,ownerUid:currentUser.uid,sellerWhatsapp:shop.whatsapp||shop.phone||'',created:existing?.created||Date.now(),updatedAt:Date.now()};
+      if(window.compactProductForCloud)obj=await window.compactProductForCloud(obj);if(!window.firebaseSaveProduct)throw new Error('cloud-unavailable');await window.firebaseSaveProduct(obj);const i=products.findIndex(p=>String(p.id)===String(obj.id));if(i>=0)products[i]=obj;else products.unshift(obj);localStorage.setItem('products',JSON.stringify(products));cancelProductEdit(true);renderSpecific();renderAll();toast(existing?'جنس اصلاح شو':'جنس آنلاین او دایمي ثبت شو')
+    }catch(e){console.error('PRODUCT_SAVE_FAILED',e);const code=String(e?.code||'');toast(code.includes('permission-denied')?'Firebase اجازه نه ورکوي — Rules باید خلاص شي':'جنس آنلاین ثبت نه شو — بیا هڅه وکړه')}
   };
 
   const prevOpen=window.openProduct;window.openProduct=function(id,push=true){
@@ -842,4 +844,60 @@ body.iz-public-shop .app{padding-bottom:20px!important}
 })();
 </script>
 
+
+<script id="iz-last-request-fix">
+(function(){
+  // Keep the selected language on every screen.
+  const savedLang=()=>{try{return localStorage.getItem('lang')||'ps'}catch(e){return 'ps'}};
+  const baseGo=window.go;
+  window.go=function(id){baseGo(id);setTimeout(()=>{try{window.setLang(savedLang())}catch(e){}},0)};
+
+  // Shared shop links are customer-only and retry until Firebase data arrives.
+  function sharedTarget(){const q=new URLSearchParams(location.search);return {shop:q.get('shop'),product:q.get('product')}}
+  function openShared(){
+    const q=sharedTarget();
+    if(q.shop){
+      document.body.classList.add('iz-public-shop'); window.__izPublicShopMode=true;
+      const s=findSellerByUid(q.shop);
+      if(s){deepLinkLast=''; window.openShop(q.shop,false); return true}
+    }else if(q.product){
+      document.body.classList.add('iz-public-shop'); window.__izPublicShopMode=true;
+      const p=db('products',[]).find(x=>String(x.id)===String(q.product)&&x.status==='approved');
+      if(p){deepLinkLast=''; window.openProduct(q.product,false); return true}
+    }
+    return false;
+  }
+  const target=sharedTarget();
+  if(target.shop||target.product){
+    document.body.classList.add('iz-public-shop'); window.__izPublicShopMode=true;
+    let tries=0; const timer=setInterval(()=>{tries++; if(openShared()||tries>30)clearInterval(timer)},250);
+    setTimeout(openShared,20);
+  }
+
+  // Cloud-first logo save: only report success after the public Firestore copy is saved.
+  window.updateMyShopLogo=async function(){
+    if(!currentUser)return toast('لومړی حساب ته ننوزئ');
+    const file=document.getElementById('myShopLogoFile')?.files?.[0];if(!file)return toast('لوګو انتخاب کړه');
+    let sellers=db('sellers',[]),uid=String(currentUser.uid||''),email=String(currentUser.email||'').toLowerCase();
+    let shop=sellers.find(s=>String(s.ownerUid||'')===uid||String(s.ownerEmail||'').toLowerCase()===email);
+    if(!shop||shop.status!=='approved')return toast('لومړی باید دوکان تایید شي');
+    try{
+      toast('لوګو دایمي ثبتېږي...'); const logo=await compressImage(file,260,.40);
+      if(!window.firebaseUpdateOwnSellerLogo)throw new Error('cloud-unavailable');
+      await window.firebaseUpdateOwnSellerLogo(logo,shop);
+      shop.logo=logo; localStorage.setItem('sellers',JSON.stringify(sellers));
+      let pub=db('publicSellers',[]),i=pub.findIndex(x=>String(x.ownerUid||'')===uid);
+      const copy={...shop,ownerUid:uid,logo,status:'approved'}; if(i>=0)pub[i]={...pub[i],...copy};else pub.unshift(copy);
+      localStorage.setItem('publicSellers',JSON.stringify(pub)); document.getElementById('myShopLogoFile').value=''; renderAll(); toast('د دوکان لوګو دایمي ثبت شو');
+    }catch(e){console.error(e);toast('لوګو آنلاین ثبت نه شو — انټرنېټ/اجازه وګوره')}
+  };
+
+  // Product save is cloud-first. A product is kept locally only after Firestore confirms it.
+  const previousSubmit=window.submitProduct;
+  window.__izCloudPermanent=true;
+  // Existing final submitProduct already saves Firestore first; keep it and make the cloud listener reopen shared links.
+  const oldRenderAll=window.renderAll;
+  window.renderAll=function(){oldRenderAll();setTimeout(()=>{try{openShared();window.setLang(savedLang())}catch(e){}},20)};
+})();
+</script>
 </body></html>
