@@ -726,4 +726,120 @@ body.iz-public-shop .app{padding-bottom:20px!important}
 })();
 </script>
 
+
+<style id="iz-category-final-style">
+#categorySpecificFields{margin-top:12px;padding:14px;border:1px solid #dfe5ea;border-radius:16px;background:#fafbfc}
+#categorySpecificFields .cs-title{font-weight:900;font-size:17px;margin-bottom:10px}
+#categorySpecificFields .cs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#categorySpecificFields .field{margin:0}
+@media(max-width:520px){#categorySpecificFields .cs-grid{grid-template-columns:1fr}}
+</style>
+<script id="iz-category-final-fix">
+(function(){
+  const lang=()=>{try{return localStorage.getItem('lang')||'ps'}catch(e){return 'ps'}};
+  const L={
+    ps:{details:'ځانګړي معلومات',price:'قیمت (AFN)',rentPrice:'میاشتنۍ کرایه (AFN)',mortgagePrice:'د ګروۍ اندازه (AFN)',qty:'موجودي / تعداد',color:'رنګ',size:'سایز',saleType:'د خرڅلاو ډول',rooms:'څو خونې',bathrooms:'څو تشنابونه',landArea:'د ځمکې اندازه (متر مربع)',buildingArea:'د ودانۍ اندازه (متر مربع)',floors:'څو پوړه',kitchen:'پخلنځی',parking:'پارکینګ / ګراج',water:'اوبه',electricity:'برېښنا',gas:'ګاز',propertyAge:'کور نوی دی که زوړ',furnished:'فرنیچر لري؟',landType:'د ځمکې ډول',roadAccess:'سړک ته لاسرسی',deed:'قباله / سند لري؟',dimensions:'اندازه / ابعاد',power:'برقي توان',brand:'برانډ',model:'ماډل',year:'کال / ماډل',mileage:'چلېدلي کیلومتر',fuel:'د تیلو ډول',gear:'ګیربکس',engine:'انجن',condition:'حالت',partFor:'د کوم موټر لپاره',storage:'حافظه',ram:'RAM',sim:'سیم کارت',screen:'سکرین اندازه',network:'شبکه',battery:'بیټرۍ',material:'مواد',gender:'د چا لپاره',clothingType:'د کالي ډول',shoeSize:'د بوټ سایز',bagType:'د بکس ډول',jewelryType:'د زیور ډول',weight:'وزن / حجم',expiry:'د ختمېدو نېټه',ingredients:'مواد / ترکیب',usage:'د استعمال ډول',dosage:'دوز / اندازه',manufacturer:'جوړوونکی شرکت',origin:'د تولید هېواد',packSize:'د بسته اندازه',serviceArea:'د خدمت ساحه',experience:'تجربه',serviceTime:'د خدمت وخت',breed:'نسل',animalAge:'عمر',animalSex:'نر / ماده',animalWeight:'وزن',vaccinated:'واکسین شوی؟',bookAuthor:'لیکوال',bookLanguage:'د کتاب ژبه',pages:'پاڼې',sportType:'د سپورټ ډول',machinePower:'د ماشین توان',cropType:'د کرنیز توکي ډول',otherInfo:'نور معلومات',yes:'هو',no:'نه',new:'نوی',used:'زوړ / استعمال شوی'},
+    fa:{details:'اطلاعات ویژه',price:'قیمت (AFN)',rentPrice:'کرایه ماهانه (AFN)',mortgagePrice:'مبلغ گروی (AFN)',qty:'موجودی / تعداد',color:'رنگ',size:'سایز',saleType:'نوع فروش',rooms:'تعداد اتاق‌ها',bathrooms:'تعداد تشناب‌ها',landArea:'مساحت زمین (متر مربع)',buildingArea:'مساحت ساختمان (متر مربع)',floors:'تعداد طبقات',kitchen:'آشپزخانه',parking:'پارکینگ / گاراژ',water:'آب',electricity:'برق',gas:'گاز',propertyAge:'خانه نو یا قدیمی',furnished:'مبله است؟',landType:'نوع زمین',roadAccess:'دسترسی به جاده',deed:'سند دارد؟',dimensions:'ابعاد',power:'توان برق',brand:'برند',model:'مدل',year:'سال / مدل',mileage:'کیلومتر کارکرد',fuel:'نوع سوخت',gear:'گیربکس',engine:'موتور',condition:'وضعیت',partFor:'برای کدام موتر',storage:'حافظه',ram:'RAM',sim:'سیم کارت',screen:'اندازه صفحه',network:'شبکه',battery:'باتری',material:'جنس',gender:'برای چه کسی',clothingType:'نوع لباس',shoeSize:'سایز کفش',bagType:'نوع کیف',jewelryType:'نوع زیور',weight:'وزن / حجم',expiry:'تاریخ انقضا',ingredients:'مواد / ترکیب',usage:'روش استفاده',dosage:'دوز / مقدار',manufacturer:'شرکت سازنده',origin:'کشور سازنده',packSize:'اندازه بسته',serviceArea:'محدوده خدمت',experience:'تجربه',serviceTime:'زمان خدمت',breed:'نژاد',animalAge:'سن',animalSex:'نر / ماده',animalWeight:'وزن',vaccinated:'واکسین شده؟',bookAuthor:'نویسنده',bookLanguage:'زبان کتاب',pages:'صفحات',sportType:'نوع ورزش',machinePower:'توان ماشین',cropType:'نوع وسیله زراعتی',otherInfo:'اطلاعات بیشتر',yes:'بله',no:'خیر',new:'نو',used:'استفاده‌شده'},
+    en:{details:'Specific details',price:'Price (AFN)',rentPrice:'Monthly rent (AFN)',mortgagePrice:'Mortgage amount (AFN)',qty:'Stock / Quantity',color:'Color',size:'Size',saleType:'Sale type',rooms:'Rooms',bathrooms:'Bathrooms',landArea:'Land area (m²)',buildingArea:'Building area (m²)',floors:'Floors',kitchen:'Kitchen',parking:'Parking / Garage',water:'Water',electricity:'Electricity',gas:'Gas',propertyAge:'Property condition',furnished:'Furnished?',landType:'Land type',roadAccess:'Road access',deed:'Has deed?',dimensions:'Dimensions',power:'Power',brand:'Brand',model:'Model',year:'Year / Model',mileage:'Mileage (km)',fuel:'Fuel type',gear:'Transmission',engine:'Engine',condition:'Condition',partFor:'Compatible vehicle',storage:'Storage',ram:'RAM',sim:'SIM',screen:'Screen size',network:'Network',battery:'Battery',material:'Material',gender:'For whom',clothingType:'Clothing type',shoeSize:'Shoe size',bagType:'Bag type',jewelryType:'Jewelry type',weight:'Weight / Volume',expiry:'Expiry date',ingredients:'Ingredients',usage:'Usage',dosage:'Dosage',manufacturer:'Manufacturer',origin:'Country of origin',packSize:'Pack size',serviceArea:'Service area',experience:'Experience',serviceTime:'Service time',breed:'Breed',animalAge:'Age',animalSex:'Sex',animalWeight:'Weight',vaccinated:'Vaccinated?',bookAuthor:'Author',bookLanguage:'Book language',pages:'Pages',sportType:'Sport type',machinePower:'Machine power',cropType:'Agriculture item type',otherInfo:'Other details',yes:'Yes',no:'No',new:'New',used:'Used'},
+    ar:{details:'معلومات خاصة',price:'السعر (AFN)',rentPrice:'الإيجار الشهري (AFN)',mortgagePrice:'مبلغ الرهن (AFN)',qty:'المخزون / الكمية',color:'اللون',size:'المقاس',saleType:'نوع البيع',rooms:'عدد الغرف',bathrooms:'عدد الحمامات',landArea:'مساحة الأرض (م²)',buildingArea:'مساحة البناء (م²)',floors:'عدد الطوابق',kitchen:'المطبخ',parking:'موقف / مرآب',water:'الماء',electricity:'الكهرباء',gas:'الغاز',propertyAge:'حالة العقار',furnished:'مفروش؟',landType:'نوع الأرض',roadAccess:'الوصول للطريق',deed:'يوجد سند؟',dimensions:'الأبعاد',power:'القدرة',brand:'العلامة التجارية',model:'الموديل',year:'السنة / الموديل',mileage:'المسافة المقطوعة',fuel:'نوع الوقود',gear:'ناقل الحركة',engine:'المحرك',condition:'الحالة',partFor:'مناسب لأي سيارة',storage:'التخزين',ram:'RAM',sim:'SIM',screen:'حجم الشاشة',network:'الشبكة',battery:'البطارية',material:'الخامة',gender:'لمن',clothingType:'نوع الملابس',shoeSize:'مقاس الحذاء',bagType:'نوع الحقيبة',jewelryType:'نوع المجوهرات',weight:'الوزن / الحجم',expiry:'تاريخ الانتهاء',ingredients:'المكونات',usage:'طريقة الاستخدام',dosage:'الجرعة',manufacturer:'الشركة المصنعة',origin:'بلد المنشأ',packSize:'حجم العبوة',serviceArea:'منطقة الخدمة',experience:'الخبرة',serviceTime:'وقت الخدمة',breed:'السلالة',animalAge:'العمر',animalSex:'الجنس',animalWeight:'الوزن',vaccinated:'مطعم؟',bookAuthor:'المؤلف',bookLanguage:'لغة الكتاب',pages:'الصفحات',sportType:'نوع الرياضة',machinePower:'قدرة الآلة',cropType:'نوع الأداة الزراعية',otherInfo:'معلومات أخرى',yes:'نعم',no:'لا',new:'جديد',used:'مستعمل'}
+  };
+  const tr=k=>(L[lang()]||L.ps)[k]||L.ps[k]||k;
+  const CONFIG={
+    home:{
+      'house-sale':[['rooms','number'],['bathrooms','number'],['landArea','number'],['buildingArea','number'],['floors','number'],['kitchen','yesno'],['parking','yesno'],['water','yesno'],['electricity','yesno'],['gas','yesno'],['furnished','yesno'],['propertyAge','condition']],
+      'house-rent':[['rooms','number'],['bathrooms','number'],['landArea','number'],['buildingArea','number'],['floors','number'],['kitchen','yesno'],['parking','yesno'],['water','yesno'],['electricity','yesno'],['gas','yesno'],['furnished','yesno'],['propertyAge','condition']],
+      'house-mortgage':[['rooms','number'],['bathrooms','number'],['landArea','number'],['buildingArea','number'],['floors','number'],['kitchen','yesno'],['parking','yesno'],['water','yesno'],['electricity','yesno'],['gas','yesno'],['furnished','yesno'],['propertyAge','condition']],
+      land:[['landArea','number'],['landType','text'],['roadAccess','yesno'],['water','yesno'],['electricity','yesno'],['deed','yesno']],
+      'shop-office':[['rooms','number'],['bathrooms','number'],['landArea','number'],['buildingArea','number'],['floors','number'],['parking','yesno'],['water','yesno'],['electricity','yesno'],['deed','yesno']],
+      furniture:[['material','text'],['dimensions','text'],['condition','condition']],
+      'home-appliances':[['brand','text'],['model','text'],['power','text'],['condition','condition']]
+    },
+    vehicles:{
+      'car-new':[['brand','text'],['model','text'],['year','number'],['fuel','text'],['gear','text'],['engine','text'],['condition','condition']],
+      'car-used':[['brand','text'],['model','text'],['year','number'],['mileage','number'],['fuel','text'],['gear','text'],['engine','text'],['condition','condition']],
+      motorcycle:[['brand','text'],['model','text'],['year','number'],['mileage','number'],['fuel','text'],['engine','text'],['condition','condition']],
+      'car-parts':[['brand','text'],['partFor','text'],['model','text'],['condition','condition']]
+    },
+    mobile:{phones:[['brand','text'],['model','text'],['storage','text'],['ram','text'],['sim','text'],['screen','text'],['network','text'],['battery','text'],['condition','condition']],
+      'mobile-accessories':[['brand','text'],['model','text'],['condition','condition'],['otherInfo','text']],
+      tablets:[['brand','text'],['model','text'],['storage','text'],['ram','text'],['screen','text'],['network','text'],['battery','text'],['condition','condition']],
+      smartwatch:[['brand','text'],['model','text'],['battery','text'],['condition','condition']]},
+    fashion:{'men-clothes':[['clothingType','text'],['material','text'],['condition','condition']], 'women-clothes':[['clothingType','text'],['material','text'],['condition','condition']], 'kids-clothes':[['clothingType','text'],['material','text'],['condition','condition']], shoes:[['brand','text'],['shoeSize','text'],['material','text'],['condition','condition']], bags:[['brand','text'],['bagType','text'],['material','text'],['condition','condition']], jewelry:[['jewelryType','text'],['material','text'],['weight','text'],['condition','condition']]},
+    beauty:{cosmetics:[['brand','text'],['weight','text'],['ingredients','text'],['expiry','date']], shampoo:[['brand','text'],['weight','text'],['usage','text'],['expiry','date']], 'skin-care':[['brand','text'],['weight','text'],['usage','text'],['expiry','date']], perfume:[['brand','text'],['weight','text'],['origin','text']], 'personal-care':[['brand','text'],['weight','text'],['usage','text'],['expiry','date']]},
+    health:{medicine:[['brand','text'],['manufacturer','text'],['dosage','text'],['packSize','text'],['expiry','date']], supplements:[['brand','text'],['manufacturer','text'],['dosage','text'],['packSize','text'],['expiry','date']], 'medical-devices':[['brand','text'],['model','text'],['condition','condition']], hygiene:[['brand','text'],['packSize','text'],['expiry','date']]},
+    food:{grocery:[['brand','text'],['weight','text'],['origin','text'],['expiry','date']], drinks:[['brand','text'],['weight','text'],['expiry','date']], sweets:[['brand','text'],['weight','text'],['expiry','date']], 'dry-fruits':[['weight','text'],['origin','text']]},
+    electronics:{computer:[['brand','text'],['model','text'],['storage','text'],['ram','text'],['screen','text'],['condition','condition']], electronics:[['brand','text'],['model','text'],['power','text'],['condition','condition']], machines:[['brand','text'],['model','text'],['machinePower','text'],['condition','condition']]},
+    sports:{'sports-equipment':[['brand','text'],['sportType','text'],['material','text'],['condition','condition']], 'sports-clothes':[['brand','text'],['sportType','text'],['material','text'],['condition','condition']]},
+    books:{books:[['bookAuthor','text'],['bookLanguage','text'],['pages','number'],['condition','condition']], stationery:[['brand','text'],['otherInfo','text']]},
+    agriculture:{'agri-tools':[['cropType','text'],['brand','text'],['condition','condition']], 'agri-machines':[['brand','text'],['model','text'],['machinePower','text'],['condition','condition']]},
+    animals:{livestock:[['breed','text'],['animalAge','text'],['animalSex','text'],['animalWeight','text'],['vaccinated','yesno']], pets:[['breed','text'],['animalAge','text'],['animalSex','text'],['vaccinated','yesno']], 'animal-feed':[['brand','text'],['weight','text'],['expiry','date']]},
+    services:{repair:[['serviceArea','text'],['experience','text'],['serviceTime','text']], transport:[['serviceArea','text'],['serviceTime','text'],['otherInfo','text']], education:[['serviceArea','text'],['experience','text'],['serviceTime','text']], 'other-services':[['serviceArea','text'],['experience','text'],['otherInfo','text']]},
+    wholesale:{'wholesale-general':[['brand','text'],['packSize','text'],['origin','text'],['otherInfo','text']]},
+    other:{other:[['otherInfo','text']]}
+  };
+  function field(k,type){
+    if(type==='yesno')return `<div class="field"><label>${tr(k)}</label><select id="cs_${k}"><option value="yes">${tr('yes')}</option><option value="no">${tr('no')}</option></select></div>`;
+    if(type==='condition')return `<div class="field"><label>${tr(k)}</label><select id="cs_${k}"><option value="new">${tr('new')}</option><option value="used">${tr('used')}</option></select></div>`;
+    return `<div class="field"><label>${tr(k)}</label><input id="cs_${k}" type="${type==='number'?'number':type==='date'?'date':'text'}"></div>`;
+  }
+  function schema(){const c=productCategory?.value||'other',s=productSubcategory?.value||'other';return CONFIG[c]?.[s]||CONFIG[c]?.[Object.keys(CONFIG[c]||{})[0]]||CONFIG.other.other}
+  function ensureBox(){let b=document.getElementById('categorySpecificFields');if(b)return b;let old=document.getElementById('dynamicProductFields');if(old)old.style.display='none';let host=productSubcategory?.closest('.field');if(!host)return null;b=document.createElement('div');b.id='categorySpecificFields';host.insertAdjacentElement('afterend',b);return b}
+  function setFieldVis(id,show,label){const e=document.getElementById(id);if(!e)return;const f=e.closest('.field');if(f)f.style.display=show?'':'none';if(label&&f){const l=f.querySelector('label');if(l)l.textContent=label}}
+  function applyProfile(){
+    const c=productCategory?.value||'other',s=productSubcategory?.value||'';
+    let showSale=true,showQty=true,showColor=true,showSize=true,showWholesale=true,priceLabel=tr('price');
+    if(c==='home'){
+      showSale=false;showQty=false;showColor=false;showSize=false;showWholesale=false;
+      if(s==='house-rent')priceLabel=tr('rentPrice'); else if(s==='house-mortgage')priceLabel=tr('mortgagePrice');
+      if(['furniture','home-appliances'].includes(s)){showQty=true;showColor=true;showSale=true;showWholesale=true;showSize=(s==='furniture')}
+    } else if(c==='vehicles'){showQty=false;showSize=false;showWholesale=false;showSale=false}
+    else if(c==='mobile'){showSize=false}
+    else if(c==='beauty'){showSize=false}
+    else if(c==='health'){showColor=false;showSize=false}
+    else if(c==='food'){showColor=false;showSize=false}
+    else if(c==='electronics'){showSize=false}
+    else if(c==='books'){showColor=false;showSize=false}
+    else if(c==='agriculture'){showSize=false}
+    else if(c==='animals'){showColor=false;showSize=false;showWholesale=false;showSale=false}
+    else if(c==='services'){showQty=false;showColor=false;showSize=false;showWholesale=false;showSale=false}
+    else if(c==='wholesale'){showColor=false;showSize=false}
+    setFieldVis('saleType',showSale,tr('saleType'));
+    setFieldVis('retailPrice',true,priceLabel);
+    const wh=document.getElementById('wholesaleFields');if(wh)wh.style.display=showWholesale?'':'none';
+    setFieldVis('productQty',showQty,tr('qty'));setFieldVis('productColor',showColor,tr('color'));setFieldVis('productSize',showSize,tr('size'));
+    if(!showSale){saleType.value='retail';toggleWholesaleFields();if(wh)wh.style.display='none'}
+  }
+  function renderSpecific(vals={}){const b=ensureBox();if(!b)return;const sc=schema();b.innerHTML=`<div class="cs-title">${tr('details')}</div><div class="cs-grid">${sc.map(([k,tp])=>field(k,tp)).join('')}</div>`;for(const [k] of sc){const e=document.getElementById('cs_'+k);if(e&&vals[k]!=null)e.value=vals[k]}applyProfile()}
+  function collectSpecific(){const o={};for(const [k] of schema()){const e=document.getElementById('cs_'+k);if(e&&String(e.value||'').trim()!=='')o[k]=e.value}return o}
+  function detailSpecific(x){const d=x.categoryDetails||x.specs||{};const order=schemaForProduct(x);const keys=order.length?order.map(a=>a[0]).filter(k=>d[k]!=null):Object.keys(d);if(!keys.length)return '';return `<div class="detail-specs">${keys.map(k=>`<div class="detail-spec"><b>${escapeHtml(tr(k))}:</b> ${escapeHtml(d[k]==='yes'?tr('yes'):d[k]==='no'?tr('no'):d[k]==='new'?tr('new'):d[k]==='used'?tr('used'):d[k])}</div>`).join('')}</div>`}
+  function schemaForProduct(x){return CONFIG[x.cat]?.[x.subcategory]||[]}
+  window.__izCollectSpecific=collectSpecific;window.__izDetailSpecific=detailSpecific;
+  const oldSub=window.updateProductSubcategories;window.updateProductSubcategories=function(){if(oldSub)oldSub();setTimeout(()=>renderSpecific(),0)};
+  document.addEventListener('change',e=>{if(e.target?.id==='productCategory'||e.target?.id==='productSubcategory')setTimeout(()=>renderSpecific(),0)});
+  const oldSet=window.setLang;window.setLang=function(l){if(oldSet)oldSet(l);setTimeout(()=>renderSpecific(window.__izEditingSpecs||{}),0)};
+  const oldEdit2=window.editProduct;window.editProduct=function(id){const p=db('products',[]).find(x=>String(x.id)===String(id));window.__izEditingSpecs=p?.categoryDetails||p?.specs||{};if(oldEdit2)oldEdit2(id);setTimeout(()=>renderSpecific(window.__izEditingSpecs),150)};
+  const oldClear2=window.clearProductForm;window.clearProductForm=function(){window.__izEditingSpecs={};if(oldClear2)oldClear2();setTimeout(()=>renderSpecific(),0)};
+
+  window.submitProduct=async function(){
+    if(!currentUser)return toast('لومړی حساب ته ننوزئ');
+    let sellers=db('sellers',[]),email=String(currentUser.email||'').trim().toLowerCase(),uid=String(currentUser.uid||'');
+    let shop=sellers.find(s=>s.status==='approved'&&((uid&&String(s.ownerUid||'')===uid)||(email&&String(s.ownerEmail||'').trim().toLowerCase()===email)));if(!shop)return toast('لومړی باید ستا دوکان د Admin لخوا تایید شي');
+    let products=db('products',[]),existing=editingProductId?products.find(p=>String(p.id)===String(editingProductId)):null;
+    const files=Array.from(productImage.files||[]),name=productName.value.trim(),c=productCategory.value,s=productSubcategory.value||'',type=(['home','vehicles','animals','services'].includes(c)&&!['furniture','home-appliances'].includes(s))?'retail':saleType.value,qty=Number(productQty.value||0),rp=Number(retailPrice.value||0),wp=Number(wholesalePrice.value||0),wm=Number(wholesaleMinQty.value||0);
+    if(!name)return toast('د جنس نوم اړین دی');if(!existing&&!files.length)return toast('لږ تر لږه یو عکس انتخاب کړئ');if(files.length>6)return toast('تر ۶ ډېر عکسونه مه انتخابوئ');if(!rp&&type!=='wholesale')return toast('قیمت ولیکئ');if(type==='wholesale'&&(!wp||!wm))return toast('عمده قیمت او مقدار ولیکئ');if(type==='both'&&(!rp||!wp||!wm))return toast('ټول قیمتونه ولیکئ');
+    try{toast(editingProductId?'جنس اصلاح کېږي...':'جنس ثبتېږي...');let images=existing?productImages(existing):[];if(files.length){images=[];for(const f of files)images.push(await compressImage(f,420,.42))}
+      let obj={...(existing||{}),id:existing?.id||Date.now(),n:name,p:type==='wholesale'?wp:rp,retailPrice:rp,wholesalePrice:wp,wholesaleMinQty:wm,saleType:type,e:'📦',shop:shop.shop,cat:c,subcategory:s,qty:(['home','vehicles','services'].includes(c)&&!['furniture','home-appliances'].includes(s))?1:qty,color:productColor.value.trim(),size:productSize.value.trim(),description:productDescription.value.trim(),categoryDetails:collectSpecific(),specs:collectSpecific(),images:images.slice(0,6),image:images[0]||'',status:'approved',ownerEmail:currentUser.email,ownerUid:currentUser.uid,sellerWhatsapp:shop.whatsapp||shop.phone||'',created:existing?.created||Date.now(),updatedAt:Date.now()};
+      if(window.compactProductForCloud)obj=await window.compactProductForCloud(obj);if(!window.firebaseSaveProduct)throw new Error('cloud-unavailable');await window.firebaseSaveProduct(obj);const i=products.findIndex(p=>String(p.id)===String(obj.id));if(i>=0)products[i]=obj;else products.unshift(obj);localStorage.setItem('products',JSON.stringify(products));cancelProductEdit(true);renderSpecific();renderAll();toast(existing?'جنس اصلاح شو':'جنس آنلاین خپور شو')
+    }catch(e){console.error(e);toast('جنس آنلاین ثبت نه شو — انټرنېټ/اجازه وګوره')}
+  };
+
+  const prevOpen=window.openProduct;window.openProduct=function(id,push=true){
+    let x=db('products',[]).find(p=>String(p.id)===String(id)&&p.status==='approved');if(!x)return toast('جنس پیدا نه شو');let sll=sellerForProduct(x)||{},imgs=productImages(x),main=imgs[0]||'',addr=[sll.country,sll.province,sll.city,sll.location].filter(Boolean).join(' • ');
+    const c=x.cat||'other',s=x.subcategory||'';const showStock=!(c==='home'||c==='vehicles'||c==='services');const showColor=!!x.color&&!['health','food','books','animals','services'].includes(c);const showSize=!!x.size&&['fashion','sports','other'].includes(c);
+    productDetailContent.innerHTML=`<div class="panel">${main?`<img id="detailMainImage" class="detail-main-img" src="${main}" alt="">`:''}${imgs.length>1?`<div class="detail-gallery">${imgs.map(u=>`<img src="${u}" onclick="detailMainImage.src=this.src">`).join('')}</div>`:''}<h2>${escapeHtml(x.n||'')}</h2><div class="price" style="font-size:24px">${Number(x.p||0).toLocaleString()} AFN</div>${showStock?`<div class="meta">${tr('qty')}: ${Number(x.qty||0)}</div>`:''}${showColor?`<div class="meta">${tr('color')}: ${escapeHtml(x.color)}</div>`:''}${showSize?`<div class="meta">${tr('size')}: ${escapeHtml(x.size)}</div>`:''}${detailSpecific(x)}${x.description?`<div style="margin-top:14px;line-height:1.9">${escapeHtml(x.description).replace(/\n/g,'<br>')}</div>`:''}</div><div class="panel"><h3>🏪 ${escapeHtml(x.shop||sll.shop||'')}</h3><div class="meta">📍 ${escapeHtml(addr||'')}</div><div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn light" onclick="openShop('${String(x.ownerUid||sll.ownerUid||'').replace(/'/g,"\\'")}')">دوکان خلاص کړه</button><button class="btn light" onclick="copyProductLink(${x.id})">🔗 Link</button></div></div><div class="panel"><div class="row"><button class="btn gold" style="flex:1" onclick="addCart(${x.id})">🛒 Cart ته</button><button class="btn ok" style="flex:1" onclick="orderNow(${x.id})">✅ فرمایش ثبت کړه</button></div>${productContactButtons(x)}</div>`;go('productDetailView');if(push)history.pushState({product:id},'',productLink(id));setTimeout(()=>{try{setLang(lang())}catch(e){}},0)
+  };
+  setTimeout(()=>renderSpecific(),100);
+})();
+</script>
+
 </body></html>
