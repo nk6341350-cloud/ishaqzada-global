@@ -264,7 +264,7 @@ const hp=document.querySelector("#homeView .hero p");if(hp)hp.textContent=t.hero
 const ctas=document.querySelectorAll("#homeView .cta button");if(ctas[0])ctas[0].textContent=t.shops;if(ctas[1])ctas[1].textContent=t.make;
 const st=document.querySelectorAll("#homeView .section-title");if(st[0]){st[0].querySelector("h3").textContent=t.cats;st[0].querySelector("span").textContent=t.all;}if(st[1])st[1].querySelector("h3").textContent=t.popular;
 document.querySelectorAll(".cat").forEach(btn=>{const m=(btn.getAttribute("onclick")||"").match(/openCategory\('([^']+)'\)/);if(m){const sp=btn.querySelector("span");if(sp)sp.textContent=(categoryNames[l]||categoryNames.ps)[m[1]]||sp.textContent;}});
-toast(l==="en"?"Language changed":l==="fa"?"زبان تغییر کرد":l==="ar"?"تم تغيير اللغة":"ژبه بدله شوه");
+
 }
 function openCategory(key){const lang=currentLang||"ps";document.getElementById("categoryTitle").textContent=(categoryNames[lang]||categoryNames.ps)[key]||key;const real=db("products",[]).filter(p=>p.status==="approved"&&(p.cat===key||p.subcategory===key));let items=real.map(x=>`<div class="card clickable" onclick="openProduct(${x.id})"><div class="photo">${productPhoto(x)}</div><div class="p"><b>${x.n}</b><div class="price">${Number(x.p).toLocaleString()} AFN</div><div class="meta">🏪 ${x.shop}</div><button type="button" class="btn gold" style="width:100%;margin-top:9px" onclick="event.stopPropagation();addCart(${x.id})">${lang==="en"?"Add to Cart":lang==="fa"?"افزودن به سبد":lang==="ar"?"أضف إلى السلة":"Cart ته"}</button>${productContactButtons(x)}</div></div>`);document.getElementById("categoryList").innerHTML=items.length?items.join(""):'<div class="panel empty" style="grid-column:1/-1">په دې کټګورۍ کې تراوسه تایید شوی اعلان نشته.</div>';go("categoryView");
 }
@@ -493,9 +493,9 @@ window.firebaseCloudReady = true;
     // Main top strings and nav labels (ensures no mixed language remains)
     const t={ps:['نړیوال آنلاین بازار','محصول، دوکان یا کټګوري ولټوئ','لټون'],fa:['بازار آنلاین جهانی','محصول، فروشگاه یا دسته‌بندی را جستجو کنید','جستجو'],en:['Global Online Marketplace','Search product, shop or category','Search'],ar:['سوق عالمي عبر الإنترنت','ابحث عن منتج أو متجر أو فئة','بحث']}[lang];
     const sm=document.querySelector('.brand small'); if(sm)sm.textContent=t[0]; const si=document.getElementById('searchInput');if(si)si.placeholder=t[1];const sb=document.querySelector('.search button');if(sb)sb.textContent=t[2];
-    if(!quiet && typeof toast==='function')toast(lang==='en'?'Language changed':lang==='fa'?'زبان تغییر کرد':lang==='ar'?'تم تغيير اللغة':'ژبه بدله شوه');
+    /* language toast intentionally disabled for stability */
   }
-  window.setLang=function(l){applyLanguage(l,false)};
+  window.setLang=function(l){applyLanguage(l,true)};
   const oldRender=window.renderAll; if(typeof oldRender==='function'){window.renderAll=function(){oldRender();applyLanguage(localStorage.getItem('lang')||'ps',true)}}
   applyLanguage(localStorage.getItem('lang')||'ps',true);
 })();
@@ -963,6 +963,130 @@ body.iz-public-shop .app{padding-bottom:20px!important}
     window.currentLang=l;
     currentLang=l;
   }catch(e){}
+})();
+</script>
+
+
+<style id="iz-ultimate-detail-stability-v4">
+/* Keep detail pages comfortably below the sticky header and keep all content reachable. */
+#productDetailView,#shopDetailView,#categoryView{padding-top:8px!important;overflow:visible!important}
+#productDetailView>.section-title,#shopDetailView>.section-title,#categoryView>.section-title{
+  position:static!important;inset:auto!important;transform:none!important;z-index:auto!important;
+  margin:8px 2px 14px!important;padding:8px 0!important;min-height:60px!important;background:transparent!important;
+}
+#productDetailView>.section-title button,#shopDetailView>.section-title button,#categoryView>.section-title button{
+  position:static!important;inset:auto!important;transform:none!important;display:inline-flex!important;
+  align-items:center!important;justify-content:center!important;min-width:104px!important;min-height:52px!important;
+  pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;
+}
+/* High-quality source stays intact, but the display is bounded so iPhone does not build an enormous detail layout. */
+#productDetailView .detail-main-img{display:block!important;width:100%!important;height:auto!important;max-height:68vh!important;object-fit:contain!important;background:#f4f6f8!important}
+#productDetailView .detail-gallery{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:8px!important}
+#productDetailView .detail-gallery img{width:100%!important;aspect-ratio:1/1!important;object-fit:cover!important}
+#productDetailContent,#shopDetailContent{overflow:visible!important;min-height:1px!important}
+#productDetailContent>.panel,#shopDetailContent>.panel{display:block!important;visibility:visible!important;opacity:1!important}
+/* Leave enough room above the fixed bottom navigation. */
+#productDetailView,#shopDetailView{padding-bottom:120px!important}
+</style>
+<script id="iz-ultimate-detail-stability-v4-js">
+(function(){
+  'use strict';
+  const LANGS=['ps','fa','en','ar'];
+  function lang(){try{const l=localStorage.getItem('lang')||'ps';return LANGS.includes(l)?l:'ps'}catch(e){return 'ps'}}
+
+  /* Never show the recurring language-changed toast. Keep exactly the selected language. */
+  const _setLang=window.setLang;
+  window.setLang=function(l){
+    if(!LANGS.includes(l))return;
+    try{localStorage.setItem('lang',l)}catch(e){}
+    try{_setLang&&_setLang(l)}catch(e){console.error('LANG',e)}
+    try{localStorage.setItem('lang',l);window.currentLang=l;currentLang=l}catch(e){}
+  };
+
+  let lastView='homeView';
+  function shownView(){const v=document.querySelector('.view.show');return v?v.id:'homeView'}
+  function lightRender(id){
+    try{
+      if(id==='homeView'&&typeof renderProducts==='function')renderProducts();
+      else if(id==='shopsView'&&typeof renderShops==='function')renderShops();
+      else if(id==='cartView'&&typeof renderCart==='function')renderCart();
+      else if(id==='sellerView'&&typeof renderMyShop==='function')renderMyShop();
+      else if(id==='accountView'&&typeof renderAccount==='function')renderAccount();
+    }catch(e){console.warn('LIGHT_RENDER',e)}
+  }
+  function safeShow(id){
+    const target=document.getElementById(id);if(!target)return;
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));
+    target.classList.add('show');
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+    document.getElementById('nav-'+id)?.classList.add('active');
+    lightRender(id);
+    try{localStorage.setItem('lang',lang());window.currentLang=lang();currentLang=lang()}catch(e){}
+    try{window.scrollTo({top:0,left:0,behavior:'auto'})}catch(e){window.scrollTo(0,0)}
+  }
+
+  /* IMPORTANT: navigation no longer calls renderAll(). That was re-building every large image repeatedly on iPhone. */
+  window.go=function(id){
+    const cur=shownView();if(cur!==id)lastView=cur;
+    safeShow(id);
+  };
+
+  /* Keep internal detail navigation out of browser history. Shared links still work when opened directly. */
+  const _openProduct=window.openProduct;
+  window.openProduct=function(id,push=true){
+    const cur=shownView();
+    window.__izProductReturn=(cur&&cur!=='productDetailView')?cur:(window.__izProductReturn||'homeView');
+    try{return _openProduct(id,false)}catch(e){console.error('OPEN_PRODUCT',e);if(typeof toast==='function')toast('جنس بیا خلاص کړه')}
+  };
+  const _openShop=window.openShop;
+  window.openShop=function(uid,push=true){
+    const cur=shownView();
+    if(cur!=='shopDetailView'&&cur!=='productDetailView')window.__izShopReturn=cur||'shopsView';
+    try{return _openShop(uid,false)}catch(e){console.error('OPEN_SHOP',e);if(typeof toast==='function')toast('دوکان بیا خلاص کړه')}
+  };
+
+  function cleanURL(){
+    try{if(location.search)history.replaceState({},'',location.pathname+location.hash)}catch(e){}
+    try{deepLinkLast=''}catch(e){}
+  }
+  function back(ev){
+    if(ev){ev.preventDefault();ev.stopPropagation()}
+    const cur=shownView();
+    if(cur==='productDetailView'){
+      const ret=window.__izProductReturn||'homeView';
+      cleanURL();safeShow(ret==='productDetailView'?'homeView':ret);return false;
+    }
+    if(cur==='shopDetailView'){
+      const ret=window.__izShopReturn||'shopsView';
+      cleanURL();safeShow(ret==='shopDetailView'?'shopsView':ret);return false;
+    }
+    if(cur==='categoryView'){cleanURL();safeShow('homeView');return false}
+    cleanURL();safeShow('homeView');return false;
+  }
+  window.izBack=back;
+
+  /* Replace old buttons completely to remove the old touchend+click double handler. */
+  function replaceBack(selector){
+    const old=document.querySelector(selector);if(!old)return;
+    const b=old.cloneNode(true);b.removeAttribute('onclick');old.replaceWith(b);
+    b.addEventListener('click',back,{passive:false});
+  }
+  replaceBack('#productDetailView>.section-title button');
+  replaceBack('#shopDetailView>.section-title button');
+  replaceBack('#categoryView>.section-title button');
+
+  /* On a direct ?product= or ?shop= link, deep-link handling should happen only once. */
+  let handledDirect=false;
+  const _handle=window.handleDeepLink;
+  window.handleDeepLink=function(){
+    const q=new URLSearchParams(location.search);
+    if(!q.get('product')&&!q.get('shop'))return;
+    if(handledDirect)return;
+    handledDirect=true;
+    try{return _handle&&_handle()}catch(e){console.error('DEEPLINK',e)}
+  };
+
+  try{localStorage.setItem('lang',lang());window.currentLang=lang();currentLang=lang()}catch(e){}
 })();
 </script>
 
