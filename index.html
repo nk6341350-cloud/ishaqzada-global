@@ -1161,7 +1161,7 @@ function apply(){let l=localStorage.getItem('lang')||'ps';document.documentEleme
 }
 const old=window.setLang;window.setLang=function(l){if(typeof old==='function')old(l);localStorage.setItem('lang',l);setTimeout(apply,0);setTimeout(apply,80)};
 const oldR=window.renderAll;window.renderAll=function(){if(typeof oldR==='function')oldR();setTimeout(apply,0)};
-new MutationObserver(()=>{clearTimeout(window.__izLT);window.__izLT=setTimeout(apply,25)}).observe(document.body,{childList:true,subtree:true});
+
 apply();
 })();
 </script>
@@ -1170,72 +1170,17 @@ apply();
 (function(){
   'use strict';
   const LANGS=['ps','fa','en','ar','ur'];
-
-  function getLang(){
-    try{
-      const l=localStorage.getItem('lang')||'ps';
-      return LANGS.includes(l)?l:'ps';
-    }catch(e){return 'ps'}
-  }
-
-  /*
-    Keep exactly one selected language.
-    A language change reloads the same page so every screen is rebuilt
-    from the original source text. This prevents a translated language
-    from becoming the source text for the next language.
-  */
-  const oldSetLang=window.setLang;
+  function getLang(){try{const l=localStorage.getItem('lang')||'ps';return LANGS.includes(l)?l:'ps'}catch(e){return 'ps'}}
+  const current=getLang();
+  document.documentElement.lang=current;
+  document.documentElement.dir=current==='en'?'ltr':'rtl';
+  document.body.dir=current==='en'?'ltr':'rtl';
   window.setLang=function(lang){
-    if(!LANGS.includes(lang)) return;
+    if(!LANGS.includes(lang) || lang===getLang()) return;
     try{localStorage.setItem('lang',lang)}catch(e){}
-    try{window.currentLang=lang;currentLang=lang}catch(e){}
     location.reload();
   };
-
-  const lang=getLang();
-  try{window.currentLang=lang;currentLang=lang}catch(e){}
-  document.documentElement.lang=lang;
-  document.documentElement.dir=lang==='en'?'ltr':'rtl';
-  document.body.dir=lang==='en'?'ltr':'rtl';
-
-  /*
-    Apply the existing language translations once on page load.
-    After that, navigation keeps the saved language instead of selecting
-    another language.
-  */
-  try{
-    if(typeof oldSetLang==='function') oldSetLang(lang);
-  }catch(e){console.warn('Language apply:',e)}
 })();
 </script>
 </body></html>
-<script id="iz-language-all-pages-final">
-(function(){
-'use strict';
-const D={
-ps:{back:'← شاته',productDetail:'د جنس تفصیل',shopPage:'د دوکان صفحه',category:'کټګوري',emptyCat:'په دې کټګورۍ کې تراوسه تایید شوی اعلان نشته.',openShop:'دوکان خلاص کړه',link:'🔗 لینک',cart:'🛒 Cart ته',order:'✅ فرمایش ثبت کړه',stock:'موجودي:',color:'رنګ:',size:'سایز:',addressMissing:'ادرس نه دی ثبت شوی',shopProducts:'د دوکان محصولات',emptyShop:'دا دوکان تراوسه محصول نه لري.',copyShop:'🔗 د دوکان لینک کاپي',verified:'✓ Verified',whatsapp:'📱 WhatsApp',message:'💬 Message'},
-fa:{back:'← بازگشت',productDetail:'جزئیات محصول',shopPage:'صفحه فروشگاه',category:'دسته‌بندی',emptyCat:'در این دسته‌بندی هنوز اعلان تأییدشده‌ای وجود ندارد.',openShop:'باز کردن فروشگاه',link:'🔗 لینک',cart:'🛒 افزودن به سبد',order:'✅ ثبت سفارش',stock:'موجودی:',color:'رنگ:',size:'اندازه:',addressMissing:'آدرس ثبت نشده است',shopProducts:'محصولات فروشگاه',emptyShop:'این فروشگاه هنوز محصولی ندارد.',copyShop:'🔗 کپی لینک فروشگاه',verified:'✓ تأییدشده',whatsapp:'📱 واتساپ',message:'💬 پیام'},
-en:{back:'← Back',productDetail:'Product Details',shopPage:'Store Page',category:'Category',emptyCat:'There are no approved listings in this category yet.',openShop:'Open Store',link:'🔗 Link',cart:'🛒 Add to Cart',order:'✅ Place Order',stock:'Stock:',color:'Color:',size:'Size:',addressMissing:'Address not provided',shopProducts:'Store Products',emptyShop:'This store has no products yet.',copyShop:'🔗 Copy Store Link',verified:'✓ Verified',whatsapp:'📱 WhatsApp',message:'💬 Message'},
-ar:{back:'← رجوع',productDetail:'تفاصيل المنتج',shopPage:'صفحة المتجر',category:'الفئة',emptyCat:'لا توجد إعلانات معتمدة في هذه الفئة حتى الآن.',openShop:'فتح المتجر',link:'🔗 الرابط',cart:'🛒 أضف إلى السلة',order:'✅ تسجيل الطلب',stock:'المخزون:',color:'اللون:',size:'المقاس:',addressMissing:'لم يتم تسجيل العنوان',shopProducts:'منتجات المتجر',emptyShop:'لا توجد منتجات في هذا المتجر حتى الآن.',copyShop:'🔗 نسخ رابط المتجر',verified:'✓ موثّق',whatsapp:'📱 واتساب',message:'💬 رسالة'},
-ur:{back:'← واپس',productDetail:'مصنوعات کی تفصیل',shopPage:'دکان کا صفحہ',category:'زمرہ',emptyCat:'اس زمرے میں ابھی تک کوئی منظور شدہ اشتہار موجود نہیں۔',openShop:'دکان کھولیں',link:'🔗 لنک',cart:'🛒 کارٹ میں شامل کریں',order:'✅ آرڈر کریں',stock:'دستیاب تعداد:',color:'رنگ:',size:'سائز:',addressMissing:'پتہ درج نہیں کیا گیا',shopProducts:'دکان کی مصنوعات',emptyShop:'اس دکان میں ابھی کوئی مصنوعات موجود نہیں۔',copyShop:'🔗 دکان کا لنک کاپی کریں',verified:'✓ تصدیق شدہ',whatsapp:'📱 واٹس ایپ',message:'💬 پیغام'}
-};
-function L(){try{return localStorage.getItem('lang')||'ps'}catch(e){return 'ps'}}
-function T(){return D[L()]||D.ps}
-function exact(root,from,to){if(!root)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(n.nodeValue.trim()===from)n.nodeValue=n.nodeValue.replace(from,to)}}
-function apply(){const t=T();
- const p=document.querySelector('#productDetailView>.section-title h3');if(p)p.textContent=t.productDetail;
- const s=document.querySelector('#shopDetailView>.section-title h3');if(s)s.textContent=t.shopPage;
- const c=document.querySelector('#categoryView>.section-title h3');if(c&&(!c.dataset.dynamicTitle||c.textContent==='کټګوري'))c.textContent=t.category;
- document.querySelectorAll('#productDetailView>.section-title button,#shopDetailView>.section-title button,#categoryView>.section-title button').forEach(b=>b.textContent=t.back);
- const roots=[document.getElementById('productDetailContent'),document.getElementById('shopDetailContent'),document.getElementById('categoryList')];
- const pairs=[['په دې کټګورۍ کې تراوسه تایید شوی اعلان نشته.',t.emptyCat],['دوکان خلاص کړه',t.openShop],['🔗 لینک',t.link],['🛒 Cart ته',t.cart],['Cart ته',t.cart.replace('🛒 ','')],['✅ فرمایش ثبت کړه',t.order],['ادرس نه دی ثبت شوی',t.addressMissing],['د دوکان محصولات',t.shopProducts],['دا دوکان تراوسه محصول نه لري.',t.emptyShop],['🔗 د دوکان لینک کاپي',t.copyShop],['✓ Verified',t.verified],['📱 WhatsApp',t.whatsapp],['💬 Message',t.message]];
- roots.forEach(r=>pairs.forEach(([a,b])=>exact(r,a,b)));
- // labels that include changing values
- const pr=document.getElementById('productDetailContent');if(pr){pr.querySelectorAll('.meta').forEach(el=>{let x=el.textContent.trim();if(/^موجودي:/.test(x))el.textContent=x.replace(/^موجودي:/,t.stock);else if(/^رنګ:/.test(x))el.textContent=x.replace(/^رنګ:/,t.color);else if(/^سایز:/.test(x))el.textContent=x.replace(/^سایز:/,t.size)})}
- document.documentElement.lang=L();document.documentElement.dir=L()==='en'?'ltr':'rtl';
-}
-const oldSet=window.setLang;window.setLang=function(l){const r=oldSet?oldSet(l):undefined;setTimeout(apply,0);return r};
-['go','openProduct','openShop','openCategory','renderProducts','renderShops','renderCart','renderAccount','renderMyShop'].forEach(name=>{const f=window[name];if(typeof f==='function'){window[name]=function(){const r=f.apply(this,arguments);setTimeout(apply,0);return r}}});
-window.addEventListener('DOMContentLoaded',()=>setTimeout(apply,0));setTimeout(apply,0);
-})();
-</script>
+
